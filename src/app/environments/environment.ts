@@ -1,4 +1,5 @@
 export const environment = {
+  API_URL_EDIBOARD: 'https://localhost:7295/',
   API_URL_LOGIN: 'https://hgtransportaciones.com/security/api/auth/login',
   API_URL_PosViaEdi: 'https://localhost:7078/api/PosicionViajes',
   API_URL_POSVIAJES: 'https://localhost:7078/api/PosicionViajes/GetData',

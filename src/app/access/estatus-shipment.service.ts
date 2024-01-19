@@ -3,23 +3,26 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { EmpresaCliente } from '../models/EmpresaCliente';
-//export { EmpresaClientes } from '../models/EmpresaCliente'; // Add this line to export the module
+import { environment } from '../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class EdiBoardService {
 
-  private baseEndpoint = "https://datahub.apphgtransportaciones.com/";
+  public tokenBearer = "";
+  private baseEndpoint = ""; //EstatusViajes
   private usuario = "master";
   private password = "master";
 
-  private edibaseEndpoint = "https://gps.apphgtransportaciones.com/apiViajes/api/PosicionViajes/";
+  private edibaseEndpoint = environment.API_URL_EDIBOARD;
 
   constructor(private http: HttpClient) { }
 
   public getEmpresaCliente(): Observable<EmpresaCliente> {
-    return this.http.get<EmpresaCliente>(this.edibaseEndpoint + 'GetEmpresaCliente');
+    //return this.http.get<EmpresaCliente>(this.edibaseEndpoint + 'GetEmpresaCliente');
+    return this.http.get<EmpresaCliente>("https://gps.apphgtransportaciones.com/apiViajes/api/PosicionViajes/GetEmpresaCliente"); //Productiva
   }
 
   private async getAuthToken(empresa: string): Promise<string | null> {
@@ -35,9 +38,49 @@ export class EdiBoardService {
     }
   }
 
-  public getEdiBoardInfo(empresa: string, ClienteEdiConfiguracionId: number): Observable<any> {
+/*   public postAuthEdiBoard(empresa: string): Observable<any> {
+    const usuario = 'master';
+    const password = 'master';
+
+    const conexion = `${this.edibaseEndpoint}getToken?user=${usuario}&password=${password}&empresa=${empresa}`;
+    console.log('conexion', conexion);
+
     return new Observable<any>(observer => {
-      this.getAuthToken(empresa).then(token => {
+      this.http.get<any>(conexion)
+        .subscribe(response => {
+          observer.next(response);
+          observer.complete();
+        }, error => {
+          console.error('Error al obtener la auth del tablero EDI:', error);
+          observer.error(error);
+        });
+    });
+  } */
+
+  public postAuthEdiBoard(empresa: string): Observable<any> {
+    const usuario = 'master';
+    const password = 'master';
+
+    const conexion = `${this.edibaseEndpoint}getToken?user=${usuario}&password=${password}&empresa=${empresa}`;
+    console.log('conexion', conexion);
+
+    return new Observable<any>(observer => {
+      this.http.get<any>(conexion)
+        .subscribe(response => {
+          observer.next(response);
+          observer.complete();
+        }, error => {
+          console.error('Error al obtener la auth del tablero EDI:', error);
+          observer.error(error);
+        });
+    });
+  }
+
+
+
+  public getEdiBoardInfo(token: string, ClienteEdiConfiguracionId: number): Observable<any> {
+    return new Observable<any>(observer => {
+      this.getAuthToken(token).then(token => {
         if (!token) {
           observer.error('Error al obtener el token de autenticación.');
           return;
@@ -62,4 +105,5 @@ export class EdiBoardService {
       });
     });
   }
+
 }

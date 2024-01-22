@@ -1,5 +1,5 @@
 // posicion-viaje.model.ts
-export interface PosicionViaje {
+/* export interface PosicionViaje {
   dataList: {
     id_unidad: string;
     id_viaje: number;
@@ -16,20 +16,21 @@ export interface PosicionViaje {
     fecha_real_viaje: Date;
     fecha_real_fin_viaje: Date;
   };
-}
+} */
 
 
 export interface PosicionesViajes {
   dataSingle: DataSingle[];
 }
 export interface DataSingle {
-  no_viaje: number;
-  shipment: string;
+  id_viaje: number;
   remitente: string;
   destinatario: string;
+  shipment: string;
   fecha_real_viaje: Date;
   fecha_real_fin_viaje: Date;
   status_viaje:string;
+  status_pedido:string;
   posiciones: DataList[];
 }
 export interface DataList {

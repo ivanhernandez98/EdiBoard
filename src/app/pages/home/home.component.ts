@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
     try {
       const response = await this.ediBoardService.getEmpresaCliente().toPromise();
 
-      console.log('response', response);
+      //console.log('response', response);
       if (response && response.dataSingle) {
         const empresasClientesMap: Map<string, { empresa: string; clientes: { descripcion: string; clienteEdiConfiguracionId: any; }[] }> = new Map();
 
@@ -80,9 +80,9 @@ export class HomeComponent implements OnInit {
         this.empresas = Array.from(empresasClientesMap.keys());
         this.clientes = Array.from(empresasClientesMap.values()).flatMap(item => item.clientes);
 
-        console.log('empresasClientes', this.empresasClientes);
+/*         console.log('empresasClientes', this.empresasClientes);
         console.log('empresas', this.empresas);
-        console.log('clientes', this.clientes);
+        console.log('clientes', this.clientes); */
       }
     } catch (error) {
       console.error('Error obteniendo la lista de empresas y clientes:', error);
@@ -116,6 +116,8 @@ export class HomeComponent implements OnInit {
 
       // Si encuentra la lista de clientes, asigna al array de clientes; de lo contrario, vacía el array de clientes
       this.clientes = clientesPorEmpresa ? clientesPorEmpresa.clientes : [];
+
+      this.sharedService.setEmpresaSeleccionada(this.empresaSeleccionada);
     } else {
       console.error('Error obteniendo la lista de empresas y clientes');
       // Lanza un error o maneja el error de acuerdo a tus necesidades
@@ -129,9 +131,10 @@ export class HomeComponent implements OnInit {
     if (!this.clientesSeleccionados.clienteEdiConfiguracionId) {
       // Si no se ha seleccionado un cliente, asigna el primer cliente de la lista
       this.clientesSeleccionados = this.clientes?.[0] || { descripcion: '', clienteEdiConfiguracionId: 0 };
+      console.log('No se ha seleccionado un cliente, se asigna el primer cliente de la lista')
     }
 
-    console.log(this.empresaSeleccionada, this.clientesSeleccionados.clienteEdiConfiguracionId);
+    //console.log(this.empresaSeleccionada, this.clientesSeleccionados.clienteEdiConfiguracionId);
     console.log(this.empresaSeleccionada, this.clientesSeleccionados);
     this.RegistroFiltro(this.empresaSeleccionada, this.clientesSeleccionados);
   }
@@ -139,10 +142,14 @@ export class HomeComponent implements OnInit {
 
   async RegistroFiltro(empresa: string, clienteDescripcion: { descripcion: string; clienteEdiConfiguracionId: number }): Promise<void> {
     console.log('RegistroFiltro', empresa, clienteDescripcion.clienteEdiConfiguracionId);
+
+    this.sharedService.setClienteSeleccionado(clienteDescripcion.clienteEdiConfiguracionId);
     try {
       // Obtener el token de autenticación
       const response = await this.ediBoardService.postAuthEdiBoard(empresa).toPromise();
       const token = response?.token;
+
+      this.sharedService.setToken(token);
 
       if (!token) {
         console.error('Error al obtener el token de autenticación.');

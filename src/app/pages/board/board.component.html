@@ -17,31 +17,30 @@
   </div>
 
   <div class="body" style="flex-wrap: wrap;">
-
     <!-- Tabla de infoTimeShipments -->
-<div class="row-auto w-full mt-4 overflow-x-auto">
-  <p-table [value]="(dataSingleEdiResult$ | async)?.infoTimeShipments" [scrollable]="true" scrollHeight="400px" [tableStyle]="{'min-width': '50rem'}" #shipmentsTable>
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Descripción</th>
-        <th>Shipment</th>
-        <th>Estatus EDI</th>
-        <th>Horas Transcurridas</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-shipment>
-      <tr>
-        <td>{{shipment.descripcion}}</td>
-        <td>{{shipment.shipment}}</td>
-        <td>{{shipment.estatus_EDI}}</td>
-        <td>{{shipment.horasTranscurrido}}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+    <div class="row-auto w-full mt-4 overflow-x-auto" #shipmentsTable>
+      <p-table [value]="(dataSingleEdiResult$ | async)?.infoTimeShipments" [scrollable]="true" scrollHeight="400px" [tableStyle]="{'min-width': '50rem'}" #shipmentsTable>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Descripción</th>
+            <th>Shipment</th>
+            <th>Estatus EDI</th>
+            <th>Horas Transcurridas</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-shipment>
+          <tr>
+            <td>{{shipment.descripcion}}</td>
+            <td>{{shipment.shipment}}</td>
+            <td>{{shipment.estatus_EDI}}</td>
+            <td>{{shipment.horasTranscurrido}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
 
     <!-- Tabla de infoErrorShipments -->
-    <div class="row-auto w-full mt-4 overflow-x-auto">
+    <div class="row-auto w-full mt-4 overflow-x-auto" #detallesTable>
       <p-table [value]="(dataSingleEdiResult$ | async)?.infoErrorShipments" [scrollable]="true" scrollHeight="400px" [tableStyle]="{'min-width': '50rem'}" #detallesTable>
         <ng-template pTemplate="header">
           <tr>

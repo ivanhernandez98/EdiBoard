@@ -1,6 +1,7 @@
-import { LivetrackingEdiPage } from './pages/livetracking-edi/livetracking-edi.page';
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,7 +17,13 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IonicModule } from '@ionic/angular';
-import { LivetrackingEdiPageModule } from './pages/livetracking-edi/livetracking-edi.module';
+
+
+import { TableModule } from 'primeng/table';
+import { DataViewModule } from 'primeng/dataview';
+import { MetricosComponent } from './pages/metricos/metricos.component';
+import { ViajesComponent } from './pages/viajes/viajes.component';
+
 
 @NgModule({
   declarations: [
@@ -25,17 +32,21 @@ import { LivetrackingEdiPageModule } from './pages/livetracking-edi/livetracking
     BoardComponent,
     HeaderComponent,
     BodyComponent,
+    MetricosComponent,
+    ViajesComponent,
     FooterComponent
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     KeyFilterModule,
     GoogleMapsModule,
     BrowserAnimationsModule,
+    TableModule,
+    DataViewModule,
     HttpClientModule,
     AppRoutingModule,
-    IonicModule.forRoot({}),
-    LivetrackingEdiPageModule, // Agrega el módulo aquí si usas carga perezosa
+    IonicModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

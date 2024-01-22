@@ -35,6 +35,8 @@
               }
             ],
             "styles": [
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
               "src/styles.scss",
               {
                 "input": "node_modules/@ionic/angular/css/core.css"

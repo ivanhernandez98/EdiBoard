@@ -1,0 +1,25 @@
+
+<section class="layout gap-x-8">
+
+  <div class="sidebar">
+    <div class=" py-24 sm:py-16">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-1" *ngFor="let entry of (dataSingleEdiResultHeader$ | async) | keyvalue">
+          <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+            <dt class="text-base leading-7 text-gray-600">{{ entry.key }}</dt>
+            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">{{ entry.value }}</dd>
+          </div>
+        </dl>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="body" style="flex-wrap: wrap;">
+    <div class="row-auto w-full mt-4 overflow-x-auto">
+      <div id="map"></div>
+    </div>
+  </div>
+
+</section>

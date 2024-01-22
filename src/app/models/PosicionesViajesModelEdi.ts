@@ -2,11 +2,11 @@ export namespace PosicionViajesModel {
 
   export class DataSingleEdiResult {
     constructor(
-      public Header?: headerEstatusEdi,
-      public InfoTimeShipments?: TranscurridoEdi[],
-      public InfoErrorShipments?: ErroresShipmentsEdi[],
-      public DetailsShipments?: InfoShipmentsEdi[],
-      public ViajesPosicionesEdi?: DataSingleEdi[]
+      public header?: headerEstatusEdi,
+      public infoTimeShipments?: TranscurridoEdi[],
+      public infoErrorShipments?: ErroresShipmentsEdi[],
+      public detailsShipments?: InfoShipmentsEdi[],
+      public viajesPosicionesEdi?: DataSingleEdi[]
     ) {}
   }
 
@@ -23,56 +23,56 @@ export namespace PosicionViajesModel {
 
   export class headerEstatusEdi {
     constructor(
-      public NUEVOS: number = 0,
-      public CONFIRMADOS: number = 0,
-      public RELACIONADOS: number = 0,
-      public REPOREVENTOS: number = 0,
-      public CANCELADOS: number = 0,
-      public LIBERADOS: number = 0,
-      public FALLIDOS: number = 0
+      public nuevos: number = 0,
+      public confirmados: number = 0,
+      public relacionados: number = 0,
+      public reporeventos: number = 0,
+      public cancelados: number = 0,
+      public liberados: number = 0,
+      public fallidos: number = 0
     ) {}
   }
 
   export class TranscurridoEdi {
     constructor(
       public descripcion?: string,
-      public Shipment?: string,
-      public Estatus_EDI?: string,
-      public HorasTranscurrido?: string
+      public shipment?: string,
+      public estatus_EDI?: string,
+      public horasTranscurrido?: string
     ) {}
   }
 
   export class ErroresShipmentsEdi {
     constructor(
-      public Shipment?: string,
-      public Equipo?: string,
-      public Errores?: string,
-      public Detalle_En_La?: string
+      public shipment?: string,
+      public equipo?: string,
+      public errores?: string,
+      public detalle_En_La?: string
     ) {}
   }
 
   export class InfoShipmentsEdi {
     constructor(
-      public ClienteEdiPedidoId: number = 0,
-      public ClienteId: number = 0,
-      public CodeSCAC?: string,
-      public Estatus_EDI?: string,
-      public Shipment?: string,
-      public Equipo?: string,
+      public clienteEdiPedidoId: number = 0,
+      public clienteId: number = 0,
+      public codeSCAC?: string,
+      public estatus_EDI?: string,
+      public shipment?: string,
+      public equipo?: string,
       public descripcion?: string,
-      public FechaIngreso: Date = new Date(),
-      public FechaAceptacion: Date = new Date(),
+      public fechaIngreso: Date = new Date(),
+      public fechaAceptacion: Date = new Date(),
       public fechaRelacionPedido: Date = new Date(),
-      public FechaExpiracion: Date = new Date(),
+      public fechaExpiracion: Date = new Date(),
       public fecha_real_viaje: Date = new Date(),
       public fecha_real_fin_viaje: Date = new Date(),
-      public Tipo_Mov?: string,
-      public Seg_TRucks?: string,
+      public tipo_Mov?: string,
+      public seg_TRucks?: string,
       public id_pedido?: number,
       public id_viaje?: number,
       public mctnumber?: string,
-      public Estatus_204?: string,
-      public Cant?: number,
+      public estatus_204?: string,
+      public cant?: number,
       public AA?: string,
       public X3?: string,
       public AF?: string,
@@ -86,8 +86,8 @@ export namespace PosicionViajesModel {
       public hr_creacion_pedido?: number,
       public hr_StopIni_Viaje?: number,
       public fechaRelacionPedidoMin?: number,
-      public UsuarioAceptacion?: string,
-      public HorasTranscurridas?: string
+      public usuarioAceptacion?: string,
+      public horasTranscurridas?: string
     ) {}
   }
 
@@ -110,9 +110,9 @@ export namespace PosicionViajesModel {
       public id_unidad: string = '',
       public id_viaje: number = 0,
       public posdate: Date = new Date(),
-      public PosLat: number = 0,
-      public PosLon: number = 0,
-      public Sistema_origen?: string
+      public posLat: number = 0,
+      public posLon: number = 0,
+      public sistema_origen?: string
     ) {}
   }
 }

@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
-import { MenuItem } from '../data/interfaces/MenuItem';
-import { environment } from '../environments/environment.prod';
+import { MenuItem } from '../../data/interfaces/MenuItem';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'

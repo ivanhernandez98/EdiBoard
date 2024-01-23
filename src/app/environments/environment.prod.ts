@@ -7,5 +7,13 @@ export const environment = {
   API_VISOR_PosViajes: 'https://gps.apphgtransportaciones.com/apiViajes/api/PosicionViajes/GetPosiciones',// REMPLAZAR CUANDO SE TENGA LA Productiva
   API_V_EDI_EmpCli: 'https://gps.apphgtransportaciones.com/apiViajes/api/PosicionViajes/GetEmpresaCliente',
   googleMapApiKey: 'AIzaSyClbgspyYklNJiCxFu5vpFO8gFMURJyxbk',
+
+  autoNavigate: 1,
+  duration: {
+    board: 5000, // 5 segundos para el componente Board
+    metricos: 5000, // 5 segundos para el componente Metricos
+    viajes: 10000, // 10 segundos para el componente Viajes
+  },
+
   production: true
 };

@@ -8,6 +8,7 @@ import { PosicionViajesModel } from 'src/app/models/PosicionesViajesModelEdi';
 import { Observable, Subscription, of } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { Table } from 'primeng/table';
+import { environment } from 'src/app/environments/environment';
 
 
 
@@ -37,6 +38,20 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
     private sharedService: SharedService,
     private cdr: ChangeDetectorRef
   ){
+  }
+
+  ngOnInit() {
+    const duration = environment.duration.board;
+
+    // Realizar acciones después de la duración especificada
+    setTimeout(() => {
+      console.log('Tiempo de espera para Board:', duration);
+
+      if (environment.autoNavigate === 1) {
+        // Navegar a la siguiente página (Metricos) después del tiempo especificado
+        this.router.navigate(['/metricos']);
+      }
+    }, duration);
   }
 
   // Método para obtener las entradas del objeto

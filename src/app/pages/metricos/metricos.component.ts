@@ -7,6 +7,7 @@ import * as ApexCharts from 'apexcharts';
 
 // Importa tus interfaces
 import { EdiMetrico, ListMetricos, EdiEstatus } from '../../models/MetricosModel';
+import { environment } from 'src/app/environments/environment';
 
 @Component({
   selector: 'app-metricos',
@@ -52,6 +53,19 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
   ngOnDestroy(): void {}
 
   ngOnInit() {
+
+    const duration = environment.duration.board;
+
+    // Realizar acciones después de la duración especificada
+    setTimeout(() => {
+      console.log('Tiempo de espera para Board:', duration);
+
+      if (environment.autoNavigate === 1) {
+        // Navegar a la siguiente página (Metricos) después del tiempo especificado
+        this.router.navigate(['/viajes']);
+      }
+    }, duration);
+
     this.sharedService.empresaSeleccionada$.subscribe(empresa => {
       this.empresaSeleccionada = empresa;
     });

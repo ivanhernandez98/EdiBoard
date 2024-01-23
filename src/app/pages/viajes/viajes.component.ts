@@ -76,6 +76,18 @@ export class ViajesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    const duration = environment.duration.board;
+
+    // Realizar acciones después de la duración especificada
+    setTimeout(() => {
+      console.log('Tiempo de espera para Board:', duration);
+
+      if (environment.autoNavigate === 1) {
+        // Navegar a la siguiente página (Metricos) después del tiempo especificado
+        this.router.navigate(['/board']);
+      }
+    }, duration);
+
     this.loadGoogleMapsScript();
   }
 

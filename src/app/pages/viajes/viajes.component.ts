@@ -7,7 +7,34 @@ import { Observable, Subscription, of } from 'rxjs';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { EdiBoardService } from 'src/app/data/services/access/estatus-shipment.service';
 import { Router } from '@angular/router';
-import { DataSingle,DataList, PosicionesViajes } from 'src/app/data/interfaces/PosicionViaje';
+//import { DataSingle,DataList, PosicionesViajes } from 'src/app/data/interfaces/PosicionViaje';
+
+
+export interface PosicionesViajes {
+  dataSingle: DataSingle[];
+}
+export interface DataSingle {
+  id_viaje: number;
+  remitente: string;
+  destinatario: string;
+  shipment: string;
+  fecha_real_viaje: Date;
+  fecha_real_fin_viaje: Date;
+  status_viaje:string;
+  status_pedido:string;
+  posiciones: DataList[];
+}
+export interface DataList {
+  id_unidad: string;
+  id_viaje: number;
+  posdate: Date;
+  posLat: number;
+  posLon: number;
+  sistema_origen?: string | null;
+  ubicacion?: string | null;
+}
+
+
 
 @Component({
   selector: 'app-viajes',
@@ -25,13 +52,9 @@ export class ViajesComponent implements OnInit {
   public dataSingleEdiResult$!: Observable<any>; // Puedes cambiar el tipo de datos según tu modelo
   private dataSingleEdiResultSubscription: Subscription | undefined;
 
-/*   asignadosIcon: string = '/assets/icon/truck_standBy.png';
-  realizadosIcon: string = '/assets/icon/truck_finish.png';
-  transitoIcon: string = '/assets/icon/truck.png'; */
-
-  asignadosIcon: string = '../../assets/icon/trucks_standbyy.png';
-  realizadosIcon: string = '../../assets/icon/truck_finish.png';
-  transitoIcon: string = '../../assets/icon/truck.png';
+  asignadosIcon: string = 'https://cdn-icons-png.flaticon.com/512/10740/10740605.png';
+  realizadosIcon: string = 'https://cdn-icons-png.flaticon.com/512/2821/2821924.png';
+  transitoIcon: string = '	https://cdn-icons-png.flaticon.com/512/1048/1048330.png';
 
   options: google.maps.MapOptions = {
     center: { lat: 23.3449538, lng: -102.2906329 },
@@ -77,7 +100,7 @@ export class ViajesComponent implements OnInit {
     try {
       await google.maps.importLibrary('maps');
       this.initMap();
-      this.addCustomMarker();
+      //this.addCustomMarker();
     } catch (error) {
       console.error('Error cargando Google Maps:', error);
     }
@@ -96,24 +119,56 @@ export class ViajesComponent implements OnInit {
     google.maps.event.addListenerOnce(this.map, 'idle', () => {
       mapEle.classList.add('show-map');
       // Resto del código, si es necesario
+      this.getViajesEdi();
     });
   }
 
-  private addCustomMarker() {
-    if (this.map) {
-      // Añade un marcador en las coordenadas proporcionadas
-      const marker = new google.maps.Marker({
-        position: { lat: 25.7470044, lng: -100.1837781 },
-        map: this.map,
-        title: 'Ubicación del marcador',
-        icon: {
-          url: this.asignadosIcon,
-          scaledSize: new google.maps.Size(42, 42),
-        },
-      });
+  private addCustomMarkers(viajes: PosicionesViajes[]) {
+    viajes.forEach(viaje => {
+      this.addCustomMarker(viaje);
+    });
+  }
 
-      // Añade el marcador al objeto de marcadores
-      this.mapMarkers[2556542] = marker;
+  public async getViajesEdi() {
+    if (this.dataSingleEdiResult && this.dataSingleEdiResult.length > 0) {
+      this.addCustomMarkers(this.dataSingleEdiResult);
+    }
+  }
+
+  private addCustomMarker(viaje: any) {
+    const PViaje = viaje.id_viaje;
+    const status = viaje.status_viaje;
+    let icon = '';
+
+    switch (status) {
+      case 'T':
+        icon = this.transitoIcon;
+        break;
+      case 'R':
+        icon = this.realizadosIcon;
+        break;
+      default:
+        icon = this.asignadosIcon;
+        break;
+    }
+
+    if (viaje.posiciones && viaje.posiciones.length > 0) {
+      const ultimaPosicion = viaje.posiciones[viaje.posiciones.length - 1];
+      const lat = ultimaPosicion.posLat;
+      const long = ultimaPosicion.posLon;
+
+      if (this.map) {
+        const marker = new google.maps.Marker({
+          position: { lat: lat, lng: long },
+          map: this.map,
+          title: `Última posición del viaje - ${PViaje}`,
+          icon: {
+            url: icon,
+            scaledSize: new google.maps.Size(42, 42),
+          },
+        });
+        this.mapMarkers[PViaje] = marker;
+      }
     }
   }
 

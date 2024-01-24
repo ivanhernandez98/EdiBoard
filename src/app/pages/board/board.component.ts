@@ -9,6 +9,7 @@ import { Observable, Subscription, of } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { Table } from 'primeng/table';
 import { environment } from 'src/app/environments/environment';
+import { SortEvent } from 'primeng/api';
 
 
 
@@ -31,6 +32,9 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
   private isMouseOverDetallesTable: boolean = false;
   private autoScrollInterval: any;
 
+  autoNavigateChecked: boolean = false;
+  showModal = false;
+
   constructor(
     private router: Router,
     private renderer: Renderer2,
@@ -40,19 +44,45 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
   ){
   }
 
-  ngOnInit() {
+  // En tu componente "board"
+  ngOnInit(): void {
+    this.showModal = false; // Asegúrate de que el modal esté oculto al cargar la vista de "board"
+
     const duration = environment.duration.board;
 
-    // Realizar acciones después de la duración especificada
-    setTimeout(() => {
-      console.log('Tiempo de espera para Board:', duration);
-
-      if (environment.autoNavigate === 1) {
-        // Navegar a la siguiente página (Metricos) después del tiempo especificado
-        this.router.navigate(['/metricos']);
+    this.sharedService.autoNavigate$.subscribe(autoNavigate => {
+      if (autoNavigate && environment.autoNavigate === 1) {
+        setTimeout(() => {
+          console.log('Tiempo de espera para Board:', duration);
+          this.router.navigate(['/metricos']);
+        }, duration);
       }
-    }, duration);
+    });
   }
+
+
+  customSort(event: SortEvent): void {
+    // Ordenar el array infoTimeShipments según la columna horasTranscurrido
+    if (event.field === 'horasTranscurrido' && event.order !== 0) {
+      const order = event.order === 1 ? 1 : -1;
+
+      this.dataSingleEdiResult$.subscribe((currentData: any) => {
+        if (currentData && currentData.infoTimeShipments) {
+          const sortedData = currentData.infoTimeShipments.slice().sort((a: any, b: any) =>
+            (a.horasTranscurrido > b.horasTranscurrido ? order : -order)
+          );
+
+          this.sharedService.setDataSingleEdiResult({
+            ...currentData,
+            infoTimeShipments: sortedData,
+          });
+        }
+      });
+    }
+  }
+
+
+
 
   // Método para obtener las entradas del objeto
   getObjectEntries(obj: any): any[] {

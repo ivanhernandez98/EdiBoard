@@ -1,45 +1,122 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EdiBoardService } from '../../data/services/access/estatus-shipment.service';
 import { dataSingle } from 'src/app/models/EmpresaCliente';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { PosicionViajesModel } from 'src/app/models/PosicionesViajesModelEdi';
 import { Router } from '@angular/router';
+import { InstanceOptions, Modal, ModalInterface, ModalOptions } from 'flowbite';
+import { Message, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
-
+export class HomeComponent implements OnInit, OnDestroy {
   empresa: string = '';
   cliente: number = 0;
   descripcion: string = '';
 
   empresaSeleccionada: string = '';
-  clientesSeleccionados: { descripcion: string; clienteEdiConfiguracionId: any } = { descripcion: '', clienteEdiConfiguracionId: 0 };
+  clientesSeleccionados: {
+    descripcion: string;
+    clienteEdiConfiguracionId: any;
+  } = { descripcion: '', clienteEdiConfiguracionId: 0 };
 
   empresas: string[] = [];
   clientes: { descripcion: string; clienteEdiConfiguracionId: any }[] = [];
-  empresasClientes: { empresa: string; clientes: { descripcion: string; clienteEdiConfiguracionId: any; }[] }[] | undefined;
+  empresasClientes:
+    | {
+        empresa: string;
+        clientes: { descripcion: string; clienteEdiConfiguracionId: any }[];
+      }[]
+    | undefined;
+
+  visible: boolean = false;
+  loading: boolean = false;
+  messages: Message[] = [];
+
+  showDialog() {
+    this.visible = true;
+  }
+
+  hideDialog() {
+    this.visible = false;
+  }
 
   constructor(
     private ediBoardService: EdiBoardService,
     private router: Router,
-    private sharedService: SharedService
-  ) { }
+    private sharedService: SharedService,
+    //private messageService: MessageService
+  ) {}
+
+  ngOnDestroy(): void {
+    // Limpiar las variables al destruir el componente
+    this.empresa = '';
+    this.cliente = 0;
+    this.descripcion = '';
+
+    this.empresaSeleccionada = '';
+    this.clientesSeleccionados = {
+      descripcion: '',
+      clienteEdiConfiguracionId: 0,
+    };
+
+    this.empresas = [];
+    this.clientes = [];
+    this.empresasClientes = undefined;
+
+    console.log('se destruye el componente');
+  }
 
   async ngOnInit(): Promise<void> {
+    // Llamar al método clearAllData en el servicio compartido
+    this.sharedService.clearAllData();
+
+    const $modalElement: HTMLElement = document.querySelector(
+      '#medium-modal'
+    ) as HTMLElement;
+
+    const modalOptions: ModalOptions = {
+      placement: 'bottom-right',
+      backdrop: 'dynamic',
+      backdropClasses: 'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
+      closable: true,
+      onHide: () => {
+        console.log('modal is hidden');
+      },
+      onShow: () => {
+        console.log('modal is shown');
+      },
+      onToggle: () => {
+        console.log('modal has been toggled');
+      },
+    };
+
+    const instanceOptions: InstanceOptions = {
+      id: 'medium-modal',
+      override: true,
+    };
+
     await this.getEmpresasClientes();
   }
 
   async getEmpresasClientes(): Promise<void> {
     try {
-      const response = await this.ediBoardService.getEmpresaCliente().toPromise();
+      const response = await this.ediBoardService
+        .getEmpresaCliente()
+        .toPromise();
 
       //console.log('response', response);
       if (response && response.dataSingle) {
-        const empresasClientesMap: Map<string, { empresa: string; clientes: { descripcion: string; clienteEdiConfiguracionId: any; }[] }> = new Map();
+        const empresasClientesMap: Map<
+          string,
+          {
+            empresa: string;
+            clientes: { descripcion: string; clienteEdiConfiguracionId: any }[];
+          }
+        > = new Map();
 
         response.dataSingle.forEach((item: dataSingle) => {
           let descripcion: string = '';
@@ -66,23 +143,24 @@ export class HomeComponent implements OnInit {
             clienteEdiConfiguracionId = item.clienteEdiConfiguracionId ?? 0;
 
             if (!empresasClientesMap.has(Empresa)) {
-              empresasClientesMap.set(Empresa, { empresa: Empresa, clientes: [] });
+              empresasClientesMap.set(Empresa, {
+                empresa: Empresa,
+                clientes: [],
+              });
             }
 
             empresasClientesMap.get(Empresa)?.clientes.push({
               descripcion: descripcion,
-              clienteEdiConfiguracionId: clienteEdiConfiguracionId
+              clienteEdiConfiguracionId: clienteEdiConfiguracionId,
             });
           }
         });
 
         this.empresasClientes = Array.from(empresasClientesMap.values());
         this.empresas = Array.from(empresasClientesMap.keys());
-        this.clientes = Array.from(empresasClientesMap.values()).flatMap(item => item.clientes);
-
-/*         console.log('empresasClientes', this.empresasClientes);
-        console.log('empresas', this.empresas);
-        console.log('clientes', this.clientes); */
+        this.clientes = Array.from(empresasClientesMap.values()).flatMap(
+          (item) => item.clientes
+        );
       }
     } catch (error) {
       console.error('Error obteniendo la lista de empresas y clientes:', error);
@@ -95,13 +173,23 @@ export class HomeComponent implements OnInit {
     // Verifica si se ha seleccionado un cliente
     if (this.clientesSeleccionados.clienteEdiConfiguracionId) {
       // Encuentra el cliente según el clienteEdiConfiguracionId seleccionado
-      const clienteEncontrado = this.clientes?.find(item => item.clienteEdiConfiguracionId === Number(this.clientesSeleccionados.clienteEdiConfiguracionId));
+      const clienteEncontrado = this.clientes?.find(
+        (item) =>
+          item.clienteEdiConfiguracionId ===
+          Number(this.clientesSeleccionados.clienteEdiConfiguracionId)
+      );
 
       // Asigna el cliente encontrado o un objeto por defecto si no se encuentra
-      this.clientesSeleccionados = clienteEncontrado || { descripcion: '', clienteEdiConfiguracionId: 0 };
+      this.clientesSeleccionados = clienteEncontrado || {
+        descripcion: '',
+        clienteEdiConfiguracionId: 0,
+      };
     } else {
       // Si no se ha seleccionado un cliente, asigna el primer cliente de la lista
-      this.clientesSeleccionados = this.clientes?.[0] || { descripcion: '', clienteEdiConfiguracionId: 0 };
+      this.clientesSeleccionados = this.clientes?.[0] || {
+        descripcion: '',
+        clienteEdiConfiguracionId: 0,
+      };
     }
     console.log(this.clientesSeleccionados);
   }
@@ -112,7 +200,9 @@ export class HomeComponent implements OnInit {
       console.log('Empresa seleccionada:', this.empresaSeleccionada);
 
       // Encuentra la lista de clientes según la empresa seleccionada
-      const clientesPorEmpresa = this.empresasClientes.find(item => item.empresa === this.empresaSeleccionada);
+      const clientesPorEmpresa = this.empresasClientes.find(
+        (item) => item.empresa === this.empresaSeleccionada
+      );
 
       // Si encuentra la lista de clientes, asigna al array de clientes; de lo contrario, vacía el array de clientes
       this.clientes = clientesPorEmpresa ? clientesPorEmpresa.clientes : [];
@@ -130,23 +220,72 @@ export class HomeComponent implements OnInit {
     // Verifica si se ha seleccionado un cliente
     if (!this.clientesSeleccionados.clienteEdiConfiguracionId) {
       // Si no se ha seleccionado un cliente, asigna el primer cliente de la lista
-      this.clientesSeleccionados = this.clientes?.[0] || { descripcion: '', clienteEdiConfiguracionId: 0 };
-      console.log('No se ha seleccionado un cliente, se asigna el primer cliente de la lista')
+      this.clientesSeleccionados = this.clientes?.[0] || {
+        descripcion: '',
+        clienteEdiConfiguracionId: 0,
+      };
+      console.log(
+        'No se ha seleccionado un cliente, se asigna el primer cliente de la lista'
+      );
     }
 
-    //console.log(this.empresaSeleccionada, this.clientesSeleccionados.clienteEdiConfiguracionId);
-    console.log(this.empresaSeleccionada, this.clientesSeleccionados);
-    this.RegistroFiltro(this.empresaSeleccionada, this.clientesSeleccionados);
+    // Muestra el modal antes de la operación asincrónica
+    this.visible = true;
+
+    // Deshabilita el botón de "Ingresar" mientras se ejecuta la operación asincrónica
+    this.loading = true;
+
+    // Ejecuta la operación asincrónica
+    this.RegistroFiltro(this.empresaSeleccionada, this.clientesSeleccionados)
+      .then(() => {
+        // Operación asincrónica completada con éxito
+
+        // Oculta el modal después de la lógica de espera
+        this.visible = false;
+
+        // Habilita el botón de "Ingresar"
+        this.loading = false;
+      })
+      .catch((error) => {
+        // Handle errors if needed
+        console.error('Error en RegistroFiltro:', error);
+
+        // Asegúrate de habilitar el botón incluso si hay un error
+        this.loading = false;
+
+        // Oculta el modal después de la lógica de espera
+        this.visible = false;
+
+        // Muestra un mensaje de error
+ /*        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Ocurrió un error durante la autenticación.',
+        }); */
+      });
   }
 
+  async RegistroFiltro(
+    empresa: string,
+    clienteDescripcion: {
+      descripcion: string;
+      clienteEdiConfiguracionId: number;
+    }
+  ): Promise<void> {
+    console.log(
+      'RegistroFiltro',
+      empresa,
+      clienteDescripcion.clienteEdiConfiguracionId
+    );
 
-  async RegistroFiltro(empresa: string, clienteDescripcion: { descripcion: string; clienteEdiConfiguracionId: number }): Promise<void> {
-    console.log('RegistroFiltro', empresa, clienteDescripcion.clienteEdiConfiguracionId);
-
-    this.sharedService.setClienteSeleccionado(clienteDescripcion.clienteEdiConfiguracionId);
+    this.sharedService.setClienteSeleccionado(
+      clienteDescripcion.clienteEdiConfiguracionId
+    );
     try {
       // Obtener el token de autenticación
-      const response = await this.ediBoardService.postAuthEdiBoard(empresa).toPromise();
+      const response = await this.ediBoardService
+        .postAuthEdiBoard(empresa)
+        .toPromise();
       const token = response?.token;
 
       this.sharedService.setToken(token);
@@ -157,7 +296,13 @@ export class HomeComponent implements OnInit {
       }
 
       // Obtener los datos del EdiBoard usando el token
-      const EdiBoard = await this.ediBoardService.getEdiBoardInfo(token, this.empresaSeleccionada, clienteDescripcion.clienteEdiConfiguracionId).toPromise();
+      const EdiBoard = await this.ediBoardService
+        .getEdiBoardInfo(
+          token,
+          this.empresaSeleccionada,
+          clienteDescripcion.clienteEdiConfiguracionId
+        )
+        .toPromise();
       //console.log('EdiBoard', EdiBoard.dataSingle);
 
       // Verificar si la respuesta de la API es válida
@@ -181,15 +326,12 @@ export class HomeComponent implements OnInit {
 
         // Navegar a la página de board
         this.router.navigate(['/board']);
-
       } else {
         console.error('La respuesta de la API es inválida.');
       }
     } catch (error) {
+      this.sharedService.clearAllData();
       console.error('Error obteniendo datos del EdiBoard:', error);
-    } finally {
-      //console.log('finally');
     }
   }
-
 }

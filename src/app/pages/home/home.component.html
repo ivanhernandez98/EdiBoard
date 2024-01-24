@@ -11,37 +11,46 @@
         <div>
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Selecciona tu empresa</label>
           <div class="relative inline-block text-left w-full">
-            <select id="empresa" name="empresa" [(ngModel)]="empresaSeleccionada" (change)="actualizarClientesSegunEmpresa()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select id="empresa" name="empresa" [(ngModel)]="empresaSeleccionada"
+              (change)="actualizarClientesSegunEmpresa()"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <option value="" disabled selected>Empresa...</option>
-              <option class="justify-center items-center" *ngFor="let empresa of empresas" [value]="empresa">{{ empresa }}</option>
+              <option class="justify-center items-center" *ngFor="let empresa of empresas" [value]="empresa">{{ empresa
+                }}</option>
             </select>
           </div>
         </div>
 
         <div>
           <div class="flex items-center justify-between">
-            <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Selecciona el cliente</label>
+            <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Selecciona el
+              cliente</label>
             <div class="text-sm">
               <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
             </div>
           </div>
           <div class="relative inline-block text-left mt-2 w-full">
-            <select id="cliente" name="cliente" (change)="actualizarCLiente()" [(ngModel)]="clientesSeleccionados.clienteEdiConfiguracionId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select id="cliente" name="cliente" (change)="actualizarCLiente()"
+              [(ngModel)]="clientesSeleccionados.clienteEdiConfiguracionId"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <option value="" disabled selected>Cliente...</option>
-              <option class="justify-center items-center" *ngFor="let cliente of clientes" [value]="cliente.clienteEdiConfiguracionId">{{ cliente.descripcion }}</option>
+              <option class="justify-center items-center" *ngFor="let cliente of clientes"
+                [value]="cliente.clienteEdiConfiguracionId">{{ cliente.descripcion }}</option>
             </select>
           </div>
         </div>
 
         <div>
-          <button (click)="btnAuth()" type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-            Ingresar
-          </button>
+          <!-- <p-button [disabled]="loading" (click)="btnAuth()" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" > Ingresar </p-button> -->
+          <!-- <p-messages [value]="messages"></p-messages> -->
+          <button [disabled]="loading" (click)="btnAuth()" class="transition delay-150 duration-300 ease-in-out flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Ingresar</button>
         </div>
       </form>
     </div>
   </div>
+
+  <p-dialog header="Por favor espere..." [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+      <p-progressSpinner></p-progressSpinner>
+  </p-dialog>
+
 </section>
-
-
-

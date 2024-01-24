@@ -17,7 +17,10 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IonicModule } from '@ionic/angular';
-
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { MessagesModule } from 'primeng/messages';
 
 import { TableModule } from 'primeng/table';
 import { DataViewModule } from 'primeng/dataview';
@@ -42,7 +45,11 @@ import { ViajesComponent } from './pages/viajes/viajes.component';
     KeyFilterModule,
     GoogleMapsModule,
     BrowserAnimationsModule,
+    ProgressSpinnerModule,
+    DialogModule,
+    ButtonModule,
     TableModule,
+    MessagesModule,
     DataViewModule,
     HttpClientModule,
     AppRoutingModule,

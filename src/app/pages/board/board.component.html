@@ -1,14 +1,19 @@
+<link rel="stylesheet" type="text/css" href="/node_modules/primeng/resources/themes/saga-blue/theme.css" />
+<link rel="stylesheet" type="text/css" href="/node_modules/primeng/resources/primeng.min.css" />
 
 
-<section class="layout gap-x-8" >
+
+<section class="layout gap-x-8">
   <div class="sidebar">
     <div class=" py-24 sm:py-16">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
 
-        <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-1" *ngFor="let entry of (dataSingleEdiResultHeader$ | async) | keyvalue">
+        <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-1"
+          *ngFor="let entry of (dataSingleEdiResultHeader$ | async) | keyvalue">
           <div class="mx-auto flex max-w-xs flex-col gap-y-4">
             <dt class="text-base leading-7 text-gray-600">{{ entry.key }}</dt>
-            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">{{ entry.value }}</dd>
+            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">{{ entry.value }}
+            </dd>
           </div>
         </dl>
 
@@ -16,10 +21,168 @@
     </div>
   </div>
 
-  <div class="body" style="flex-wrap: wrap;">
-    <!-- Tabla de infoTimeShipments -->
-    <div class="row-auto w-full mt-4 overflow-x-auto" #shipmentsTable>
-      <p-table [value]="(dataSingleEdiResult$ | async)?.infoTimeShipments" [scrollable]="true" scrollHeight="400px" [tableStyle]="{'min-width': '50rem'}" #shipmentsTable>
+  <div class="body mt-6" style="flex-wrap: wrap;">
+
+    <div class="row-auto w-full mt-4 overflow-y-auto max-h-80" #shipmentsTable>
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+
+        </div>
+        <table id="scrollableTable"
+          class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 scrollable-table">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="p-4 sticky-th">
+                <div class="flex items-center">
+                  <input id="checkbox-all-search" type="checkbox"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                  <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                </div>
+              </th>
+              <th scope="col" class="px-6 py-3 sticky-th">
+                Descripción
+              </th>
+              <th scope="col" class="px-6 py-3 sticky-th">
+                Shipment
+              </th>
+              <th scope="col" class="px-6 py-3 sticky-th">
+                Estatus EDI
+              </th>
+              <th scope="col" class="px-6 py-3 sticky-th">
+                Horas Transcurridas
+              </th>
+            </tr>
+          </thead>
+          <tbody > <!-- onmouseenter="detenerScroll(this)" onmouseleave="reiniciarScroll(this)" -->
+            <!-- Aquí iteras sobre tus datos de Angular para llenar las filas -->
+            <ng-container *ngFor="let shipment of (dataSingleEdiResult$ | async)?.infoTimeShipments">
+              <tr
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="w-4 p-4">
+                  <div class="flex items-center">
+                    <input id="checkbox-table-search-{{shipment.id}}" type="checkbox"
+                      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="checkbox-table-search-{{shipment.id}}" class="sr-only">checkbox</label>
+                  </div>
+                </td>
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {{ shipment.descripcion }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ shipment.shipment }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ shipment.estatus_EDI }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ shipment.horasTranscurrido }}
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row-auto w-full mt-4 overflow-y-auto max-h-80" #detallesTable>
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+        </div>
+        <table id="scrollableTable"
+          class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 scrollable-table">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="p-4 sticky-th">
+                <div class="flex items-center">
+                  <input id="checkbox-all-search" type="checkbox"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                  <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                </div>
+              </th>
+              <th scope="col" class="px-6 py-3 sticky-th">
+                Shipment
+              </th>
+              <th scope="col" class="px-6 py-3 sticky-th">
+                Equipo
+              </th>
+              <th scope="col" class="px-6 py-3 sticky-th">
+                Errores
+              </th>
+              <th scope="col" class="px-6 py-3 sticky-th">
+                Detalles
+              </th>
+            </tr>
+          </thead>
+          <tbody > <!-- onmouseenter="detenerScroll(this)" onmouseleave="reiniciarScroll(this)" -->
+            <ng-container *ngFor="let shipment of (dataSingleEdiResult$ | async)?.infoErrorShipments">
+              <tr
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="w-4 p-4">
+                  <div class="flex items-center">
+                    <input id="checkbox-table-search-{{shipment.id}}" type="checkbox"
+                      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="checkbox-table-search-{{shipment.id}}" class="sr-only">checkbox</label>
+                  </div>
+                </td>
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {{ shipment.shipment }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ shipment.equipo }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ shipment.errores }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ shipment.detalle_En_La }}
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  function detenerScroll(elemento) {
+    var id = elemento.id;
+    var table = document.getElementById(id);
+    table.style.animationPlayState = 'paused';
+  }
+
+  function reiniciarScroll(elemento) {
+    var id = elemento.id;
+    var table = document.getElementById(id);
+    table.style.animationPlayState = 'running';
+  }
+</script>
+
+<!--
+<section class="layout gap-x-8">
+  <div class="sidebar">
+    <div class=" py-24 sm:py-16">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-1"
+          *ngFor="let entry of (dataSingleEdiResultHeader$ | async) | keyvalue">
+          <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+            <dt class="text-base leading-7 text-gray-600">{{ entry.key }}</dt>
+            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">{{ entry.value }}
+            </dd>
+          </div>
+        </dl>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="body mt-6" style="flex-wrap: wrap;">
+    <div class="row-auto w-full mt-4 overflow-y-auto" #shipmentsTable>
+      <p-table [value]="(dataSingleEdiResult$ | async)?.infoTimeShipments" [scrollable]="true" scrollHeight="400px"
+        [tableStyle]="{'min-width': '50rem'}" #shipmentsTable>
         <ng-template pTemplate="header">
           <tr>
             <th>Descripción</th>
@@ -28,7 +191,7 @@
             <th>Horas Transcurridas</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-shipment>
+        <ng-template id="scrolling-table1" pTemplate="body" let-shipment>
           <tr>
             <td>{{shipment.descripcion}}</td>
             <td>{{shipment.shipment}}</td>
@@ -39,9 +202,9 @@
       </p-table>
     </div>
 
-    <!-- Tabla de infoErrorShipments -->
-    <div class="row-auto w-full mt-4 overflow-x-auto" #detallesTable>
-      <p-table [value]="(dataSingleEdiResult$ | async)?.infoErrorShipments" [scrollable]="true" scrollHeight="400px" [tableStyle]="{'min-width': '50rem'}" #detallesTable>
+    <div class="row-auto w-full mt-4 overflow-y-auto" #detallesTable>
+      <p-table [value]="(dataSingleEdiResult$ | async)?.infoErrorShipments" [scrollable]="true" scrollHeight="400px"
+        [tableStyle]="{'min-width': '50rem'}" #detallesTable>
         <ng-template pTemplate="header">
           <tr>
             <th>Shipment</th>
@@ -50,7 +213,7 @@
             <th>Detalle</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-shipment>
+        <ng-template id="scrolling-table2" pTemplate="body" let-shipment>
           <tr>
             <td>{{shipment.shipment}}</td>
             <td>{{shipment.equipo}}</td>
@@ -60,8 +223,7 @@
         </ng-template>
       </p-table>
     </div>
-
   </div>
 </section>
-
+ -->
 

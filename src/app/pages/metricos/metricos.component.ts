@@ -26,6 +26,7 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
   token: string = '';
 
   dropdownOptions: string[] = ['Yesterday', 'Today', 'Last 7 days', 'Last 30 days', 'Last 90 days'];
+  autoNavigateChecked: boolean = false;
 
   constructor(
     private router: Router,
@@ -52,20 +53,23 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
 
   ngOnDestroy(): void {}
 
+  // metricos.component.ts
   ngOnInit() {
+    const duration = environment.duration.metricos;
 
-    const duration = environment.duration.board;
-
-    // Realizar acciones después de la duración especificada
-    setTimeout(() => {
-      console.log('Tiempo de espera para Board:', duration);
-
-      if (environment.autoNavigate === 1) {
-        // Navegar a la siguiente página (Metricos) después del tiempo especificado
-        this.router.navigate(['/viajes']);
+    // Suscribirse al estado del toggle
+    this.sharedService.autoNavigate$.subscribe(autoNavigate => {
+      if (autoNavigate && environment.autoNavigate === 1) {
+        // Realizar acciones después de la duración especificada
+        setTimeout(() => {
+          console.log('Tiempo de espera para Metricos:', duration);
+          // Navegar a la siguiente página (Viajes) después del tiempo especificado
+          this.router.navigate(['/viajes']);
+        }, duration);
       }
-    }, duration);
+    });
 
+    // Resto de tu código...
     this.sharedService.empresaSeleccionada$.subscribe(empresa => {
       this.empresaSeleccionada = empresa;
     });
@@ -78,6 +82,8 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
       this.token = token;
     });
   }
+
+
 
   async getDatosMetrico(): Promise<void> {
     if (this.empresaSeleccionada && this.clienteSeleccionado && this.token) {

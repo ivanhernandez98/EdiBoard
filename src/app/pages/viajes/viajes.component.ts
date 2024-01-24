@@ -34,8 +34,6 @@ export interface DataList {
   ubicacion?: string | null;
 }
 
-
-
 @Component({
   selector: 'app-viajes',
   templateUrl: './viajes.component.html',
@@ -64,7 +62,7 @@ export class ViajesComponent implements OnInit {
 
 
   dataSingleEdiResult: any[] = [];
-
+  autoNavigateChecked: boolean = false;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -75,21 +73,26 @@ export class ViajesComponent implements OnInit {
     private sharedService: SharedService,
   ) { }
 
+  // viajes.component.ts
   ngOnInit() {
-    const duration = environment.duration.board;
+    const duration = environment.duration.viajes;
 
-    // Realizar acciones después de la duración especificada
-    setTimeout(() => {
-      console.log('Tiempo de espera para Board:', duration);
-
-      if (environment.autoNavigate === 1) {
-        // Navegar a la siguiente página (Metricos) después del tiempo especificado
-        this.router.navigate(['/board']);
+    // Suscribirse al estado del toggle
+    this.sharedService.autoNavigate$.subscribe(autoNavigate => {
+      if (autoNavigate && environment.autoNavigate === 1) {
+        // Realizar acciones después de la duración especificada
+        setTimeout(() => {
+          console.log('Tiempo de espera para Viajes:', duration);
+          // Navegar a la siguiente página (Board) después del tiempo especificado
+          this.router.navigate(['/board']);
+        }, duration);
       }
-    }, duration);
+    });
 
     this.loadGoogleMapsScript();
   }
+
+
 
   ngAfterViewInit(): void {
     this.dataSingleEdiResultSubscription = this.sharedService.dataSingleEdiResult$.subscribe(

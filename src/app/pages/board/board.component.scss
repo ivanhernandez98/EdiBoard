@@ -1,5 +1,4 @@
-.layout {
-  /* width: 100vh; */
+/* .layout {
   height: 90vh;
 
   display: grid;
@@ -8,10 +7,83 @@
     / auto 1fr;
   gap: 8px;
 }
-
-/* .scrollable-table {
-  overflow-x: auto;
-} */
-
 .sidebar { grid-area: sidebar; }
 .body { grid-area: body; }
+ */
+
+
+ /* .layout {
+  height: 90vh;
+  display: grid;
+  grid-template-areas: "sidebar body";
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.scrollable-table {
+  overflow-y: auto;
+  animation: scrollAnimation 10s linear infinite;
+}
+
+@keyframes scrollAnimation {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(calc(10px - 70%));
+  }
+}
+ */
+
+ .layout {
+  height: 90vh;
+  display: grid;
+  grid-template-areas: "sidebar body";
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.scrollable-table {
+  overflow-y: auto;
+  position: relative;
+
+  table {
+    width: 50%;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    //background-color: #f8f9fa;
+    z-index: 2;
+  }
+
+  td {
+    overflow-y: auto;
+    animation: scrollAnimation 1.5s linear infinite;
+    text-align: left;
+  }
+}
+
+@keyframes scrollAnimation {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(calc(50px  - 90%));
+  }
+}

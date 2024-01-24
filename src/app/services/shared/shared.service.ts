@@ -8,6 +8,10 @@ import { dataSingle, EmpresaCliente } from 'src/app/models/EmpresaCliente';
 })
 export class SharedService {
 
+
+  private autoNavigateSubject = new BehaviorSubject<boolean>(true);
+  public autoNavigate$ = this.autoNavigateSubject.asObservable();
+
   private dataSingleEdiResultSubject = new BehaviorSubject<PosicionViajesModel.DataSingleEdiResult | null>(null);
   public dataSingleEdiResult$ = this.dataSingleEdiResultSubject.asObservable();
 
@@ -28,6 +32,11 @@ export class SharedService {
 
   private TokenSubject = new BehaviorSubject<string>('');
   public Token$ = this.TokenSubject.asObservable();
+
+  setAutoNavigate(value: boolean): void {
+    console.log('setAutoNavigate', value);
+    this.autoNavigateSubject.next(value);
+  }
 
   setDataSingleEdiResult(data: PosicionViajesModel.DataSingleEdiResult): void {
     console.log('setDataSingleEdiResult', data);
@@ -58,6 +67,20 @@ export class SharedService {
   setClienteSeleccionado(cliente: number): void {
     console.log('setClienteSeleccionado', cliente);
     this.clienteSeleccionadoSubject.next(cliente);
+  }
+
+
+  // Método para limpiar todas las variables en el servicio compartido
+  clearAllData(): void {
+    console.log('Clearing all data in SharedService');
+
+    this.autoNavigateSubject.next(false);
+    this.dataSingleEdiResultSubject.next(null);
+    this.dataSingleSubject.next(null);
+    this.TokenSubject.next('');
+    this.descripcionSubject.next('');
+    this.empresaSeleccionadaSubject.next('');
+    this.clienteSeleccionadoSubject.next(0);
   }
 
 }

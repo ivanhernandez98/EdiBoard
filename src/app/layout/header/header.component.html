@@ -1,11 +1,11 @@
 <header class="flex justify-center items-center py-8 w-[1120px] min-w[252px] mx-auto ">
-  <nav class="bg-white dark:bg-gray-900  fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+  <nav *ngIf="empresa && descripcion" class="bg-white dark:bg-gray-900  fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600" >
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <a href="https://hgtransportaciones.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
           <img src="https://hgtransportaciones.com/wp-content/uploads/2023/08/hg-transportaciones-logotipo.svg" class="h-8" alt="Flowbite Logo">
           <!-- <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">HG</span> -->
       </a>
-      <div *ngIf="empresa && descripcion" style="display: flex;">
+      <div  style="display: flex;">
         <h2 [ngClass]="empresa">{{ empresa }} </h2><h2 class="mt-2 py-2 px-2"> | </h2><h2 [ngClass]="descripcion">{{ descripcion }}</h2>
       </div>
       <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">

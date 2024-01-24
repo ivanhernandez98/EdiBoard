@@ -53,12 +53,13 @@
 .body {
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: hidden;
 }
 
 .scrollable-table {
   overflow-y: auto;
   position: relative;
+  overflow-y: hidden;
 
   table {
     width: 50%;
@@ -73,8 +74,9 @@
 
   td {
     overflow-y: auto;
-    animation: scrollAnimation 1.5s linear infinite;
+    animation: scrollAnimation 10s linear infinite;
     text-align: left;
+    z-index: 1000;
   }
 }
 
@@ -84,6 +86,6 @@
   }
 
   100% {
-    transform: translateY(calc(50px  - 90%));
+    transform: translateY(calc(-760px - 80%));
   }
 }

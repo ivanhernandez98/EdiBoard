@@ -35,6 +35,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   visible: boolean = false;
   loading: boolean = false;
   messages: Message[] = [];
+  autoNavigateChecked: boolean = false;
 
   showDialog() {
     this.visible = true;
@@ -42,6 +43,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   hideDialog() {
     this.visible = false;
+  }
+
+  onToggleChange(): void {
+    this.sharedService.setAutoNavigate(this.autoNavigateChecked);
   }
 
   constructor(
@@ -73,31 +78,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     // Llamar al método clearAllData en el servicio compartido
     this.sharedService.clearAllData();
-
-    const $modalElement: HTMLElement = document.querySelector(
-      '#medium-modal'
-    ) as HTMLElement;
-
-    const modalOptions: ModalOptions = {
-      placement: 'bottom-right',
-      backdrop: 'dynamic',
-      backdropClasses: 'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
-      closable: true,
-      onHide: () => {
-        console.log('modal is hidden');
-      },
-      onShow: () => {
-        console.log('modal is shown');
-      },
-      onToggle: () => {
-        console.log('modal has been toggled');
-      },
-    };
-
-    const instanceOptions: InstanceOptions = {
-      id: 'medium-modal',
-      override: true,
-    };
 
     await this.getEmpresasClientes();
   }
@@ -303,7 +283,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           clienteDescripcion.clienteEdiConfiguracionId
         )
         .toPromise();
-      //console.log('EdiBoard', EdiBoard.dataSingle);
+      console.log('EdiBoard', EdiBoard);
 
       // Verificar si la respuesta de la API es válida
       if (EdiBoard) {

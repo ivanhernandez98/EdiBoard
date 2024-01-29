@@ -176,7 +176,7 @@ export class ViajesComponent implements OnInit {
         const marker = new google.maps.Marker({
           position: { lat: lat, lng: long },
           map: this.map,
-          title: `Última posición del viaje - ${PViaje}`,
+          title: `Estatus del viaje: ${status.toString()} \nÚltima posición del viaje - ${PViaje} `,
           icon: {
             url: icon,
             scaledSize: new google.maps.Size(42, 42),

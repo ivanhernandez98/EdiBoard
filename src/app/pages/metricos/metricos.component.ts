@@ -123,6 +123,23 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
     console.log(colores);
 
     const options = {
+      xaxis: {
+        show: true,
+        categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
+        labels: {
+          show: true,
+          style: {
+            fontFamily: "Inter, sans-serif",
+            cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+          }
+        },
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+      },
       series: cantidadXEstatus,
       chart: {
         height: 600,

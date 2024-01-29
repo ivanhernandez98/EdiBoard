@@ -7,7 +7,7 @@ export const environment = {
   API_V_EDI_EmpCli: 'https://localhost:7078/api/PosicionViajes/GetEmpresaCliente',
   googleMapApiKey: 'AIzaSyClbgspyYklNJiCxFu5vpFO8gFMURJyxbk',
 
-  autoNavigate: 1,
+  autoNavigate: 0,
   duration: {
     board: 5000, // 5 segundos para el componente Board
     metricos: 5000, // 5 segundos para el componente Metricos

@@ -59,8 +59,8 @@ export class EdiBoardService {
         'Authorization': `${token}`
       });
 
-      const tripInfoEndpoint = `${this.edibaseEndpoint}api/EstatusViajesEdi?empresa=${empresa}&ClienteEdiConfiguracionId=${ClienteEdiConfiguracionId}`;
-
+      //const tripInfoEndpoint = `${this.edibaseEndpoint}api/EstatusViajesEdi?empresa=${empresa}&ClienteEdiConfiguracionId=${ClienteEdiConfiguracionId}`;
+      const tripInfoEndpoint = `${this.edibaseEndpoint}api/EstatusViajesEdi?empresa=${'HG'}&ClienteEdiConfiguracionId=${2}`;
       this.http.get<any>(tripInfoEndpoint, { headers })
         .pipe(
           catchError(error => {

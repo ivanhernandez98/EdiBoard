@@ -4,8 +4,7 @@ import { dataSingle } from 'src/app/models/EmpresaCliente';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { PosicionViajesModel } from 'src/app/models/PosicionesViajesModelEdi';
 import { Router } from '@angular/router';
-import { InstanceOptions, Modal, ModalInterface, ModalOptions } from 'flowbite';
-import { Message, MessageService } from 'primeng/api';
+import { Message } from 'primeng/api';
 
 @Component({
   selector: 'app-home',
@@ -52,12 +51,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private ediBoardService: EdiBoardService,
     private router: Router,
-    private sharedService: SharedService,
-    //private messageService: MessageService
+    private sharedService: SharedService
   ) {}
 
   ngOnDestroy(): void {
-    // Limpiar las variables al destruir el componente
     this.empresa = '';
     this.cliente = 0;
     this.descripcion = '';
@@ -71,12 +68,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.empresas = [];
     this.clientes = [];
     this.empresasClientes = undefined;
-
-    console.log('se destruye el componente');
   }
 
   async ngOnInit(): Promise<void> {
-    // Llamar al método clearAllData en el servicio compartido
     this.sharedService.clearAllData();
 
     await this.getEmpresasClientes();
@@ -148,8 +142,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   actualizarCLiente(): void {
-    console.log('actualizarCLiente');
-
     // Verifica si se ha seleccionado un cliente
     if (this.clientesSeleccionados.clienteEdiConfiguracionId) {
       // Encuentra el cliente según el clienteEdiConfiguracionId seleccionado
@@ -195,8 +187,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   btnAuth(): void {
-    console.log('btnRegistrar');
-
     // Verifica si se ha seleccionado un cliente
     if (!this.clientesSeleccionados.clienteEdiConfiguracionId) {
       // Si no se ha seleccionado un cliente, asigna el primer cliente de la lista
@@ -235,13 +225,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         // Oculta el modal después de la lógica de espera
         this.visible = false;
-
-        // Muestra un mensaje de error
- /*        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Ocurrió un error durante la autenticación.',
-        }); */
       });
   }
 
@@ -252,12 +235,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       clienteEdiConfiguracionId: number;
     }
   ): Promise<void> {
-    console.log(
-      'RegistroFiltro',
-      empresa,
-      clienteDescripcion.clienteEdiConfiguracionId
-    );
-
     this.sharedService.setClienteSeleccionado(
       clienteDescripcion.clienteEdiConfiguracionId
     );
@@ -283,7 +260,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           clienteDescripcion.clienteEdiConfiguracionId
         )
         .toPromise();
-      console.log('EdiBoard', EdiBoard);
 
       // Verificar si la respuesta de la API es válida
       if (EdiBoard) {

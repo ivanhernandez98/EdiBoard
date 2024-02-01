@@ -93,10 +93,13 @@ export namespace PosicionViajesModel {
 
   export class DataSingleEdi {
     constructor(
+      public id_pedido: number = 0,
       public id_viaje: number = 0,
       public remitente: string = '',
       public destinatario: string = '',
       public shipment: string = '',
+      public fecha_despacho: Date = new Date(),
+      public eta: Date = new Date(),
       public fecha_real_viaje: Date = new Date(),
       public fecha_real_fin_viaje: Date = new Date(),
       public status_viaje: string = '',
@@ -112,7 +115,8 @@ export namespace PosicionViajesModel {
       public posdate: Date = new Date(),
       public posLat: number = 0,
       public posLon: number = 0,
-      public sistema_origen?: string
+      public sistema_origen?: string,
+      public ubicacion?: string
     ) {}
   }
 }

@@ -26,6 +26,8 @@ import { TableModule } from 'primeng/table';
 import { DataViewModule } from 'primeng/dataview';
 import { MetricosComponent } from './pages/metricos/metricos.component';
 import { ViajesComponent } from './pages/viajes/viajes.component';
+import { ReportesComponent } from './pages/Reportes/Reportes.component';
+
 
 
 @NgModule({
@@ -37,6 +39,7 @@ import { ViajesComponent } from './pages/viajes/viajes.component';
     BodyComponent,
     MetricosComponent,
     ViajesComponent,
+    ReportesComponent,
     FooterComponent
   ],
   imports: [

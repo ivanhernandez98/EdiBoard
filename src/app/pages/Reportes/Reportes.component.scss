@@ -1,0 +1,84 @@
+.layout {
+  width: 100%;
+  max-width: 2200px; /* Ancho máximo para PC y tabletas */
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+
+  display: grid;
+  grid:
+    "header" auto
+    "main" 1fr
+    "footer" auto
+    / 1fr;
+  gap: 8px;
+
+  @media screen and (max-width: 768px) {
+    max-width: 100%; /* Ancho máximo para dispositivos móviles */
+  }
+
+  .main {
+    grid-area: main;
+    width: 100%; /* Ocupar el 100% del ancho del contenedor principal */
+
+    @media screen and (min-width: 768px) {
+      /* Estilos específicos para tabletas */
+      .responsive-tablet {
+        font-size: 16px; /* Tamaño de fuente para tabletas */
+        /* Agrega aquí los estilos específicos para tabletas */
+      }
+    }
+
+    @media screen and (min-width: 1024px) {
+      /* Estilos específicos para pantallas grandes (PC) */
+      .responsive-pc {
+        font-size: 18px; /* Tamaño de fuente para pantallas grandes */
+        /* Agrega aquí los estilos específicos para pantallas grandes (PC) */
+      }
+    }
+
+    @media screen and (min-width: 2560px) {
+      /* Estilos específicos para pantallas 4K */
+      .responsive-4k {
+        font-size: 20px; /* Tamaño de fuente para pantallas 4K */
+        /* Agrega aquí los estilos específicos para pantallas 4K */
+      }
+    }
+
+    .responsive-table {
+      width: 100%;
+      overflow-x: auto;
+
+      @media screen and (max-width: 768px) {
+        /* Estilos adicionales para pantallas móviles */
+      }
+    }
+  }
+
+  .detalles-edi {
+    overflow-y: auto;
+    position: relative;
+    overflow-y: hidden;
+    //z-index: 1;
+
+    th {
+      position: sticky;
+      top: 0;
+      background-color: #f8f9fa;
+      z-index: 1;
+    }
+
+    td {
+      overflow-y: auto;
+      animation: scrollAnimation 10s linear infinite;
+      text-align: left;
+      z-index: -1;
+    }
+  }
+
+
+}
+
+
+
+.main { grid-area: main; }

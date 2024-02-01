@@ -1,46 +1,52 @@
-<section class="layout gap-x-8">
+
+<section class="layout w-full">
+
   <div class="sidebar">
-    <div class=" py-24 sm:py-16">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-
-        <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-1"
-          *ngFor="let entry of (dataSingleEdiResultHeader$ | async) | keyvalue">
-          <div class="mx-auto flex max-w-xs flex-col gap-y-4">
-            <dt class="text-base leading-7 text-gray-600">{{ entry.key }}</dt>
-            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">{{ entry.value }}
-            </dd>
+    <ng-container *ngIf="dataSingleEdiResultHeader$ | async as header">
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-2 text-center lg:grid-cols-1 mt-2">
+        <ng-container *ngFor="let key of orderKeys">
+          <div *ngIf="header.hasOwnProperty(key)"
+            class="max-w-sm p-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <h2 class="-mt-1 mb-2 text-6xl font-semibold tracking-tight text-gray-900 dark:text-white"
+              style="display: flex; justify-content: space-evenly;">
+              <ng-container *ngIf="estatusSvgMap[key] as svg">
+                <div [innerHTML]="getSvgContent(svg)" class="mr-2 items-center flex"></div>
+              </ng-container>
+              {{ header[key] }}
+            </h2>
+            <p class="mb-1 font-normal text-gray-500 dark:text-gray-400 text-xl uppercase">{{ key }}</p>
           </div>
-        </dl>
-
-      </div>
-    </div>
+        </ng-container>
+      </dl>
+    </ng-container>
   </div>
 
-  <div class="body flex flex-wrap">
-    <!-- Primera fila -->
+
+  <div class="Detalles" style="display: flex;">
     <div class="w-full mt-4 px-2">
-      <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+      <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6" style="height: 100%;">
         <div class="flex justify-between mb-2">
           <div>
-            <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">EDI x Semana</h5>
+            <h5 class="leading-none text-5xl font-bold text-gray-900 dark:text-white pb-2 text-center">Historico Semanal</h5>
           </div>
         </div>
         <div id="data-labels-chart" class="chart-container"></div>
       </div>
     </div>
+  </div>
 
-    <!-- Segunda fila -->
+
+  <div class="Errores" style="display: flex;">
     <div class="w-full mt-4 px-2">
-      <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-        <div class="flex justify-between items-start w-full">
-          <div class="flex-col items-center">
-            <!-- Contenido de la segunda fila -->
+      <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6" style="height: 100%; display: flex; align-content: space-around; flex-wrap: wrap; justify-content: center;">
+        <div class="flex justify-between mb-2 items-center content-center">
+          <div>
+            <h5 class="leading-none text-5xl font-bold text-gray-900 dark:text-white pb-2 text-center">Semana Actual</h5>
           </div>
         </div>
-
-        <!-- Line Chart -->
         <div class="py-2" id="pie-chart"></div>
       </div>
     </div>
   </div>
+
 </section>

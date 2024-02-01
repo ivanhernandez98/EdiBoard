@@ -1,13 +1,5 @@
-
-
-/*
- * Optional: Makes the sample page fill the window.
- */
-
-
 .layout {
-  /* width: 100vh; */
-  height: 90vh;
+  width: 100%;
 
   display: grid;
   grid:
@@ -16,15 +8,12 @@
   gap: 8px;
 }
 
-.scrollable-table {
-  overflow-x: auto;
-}
-
-.sidebar { grid-area: sidebar; }
+.sidebar { grid-area: sidebar; white-space:nowrap; }
 .body {
   grid-area: body;
   display: flex;
   flex-wrap: wrap;
+  height: 100%;
 
   #map {
     height: 100%;
@@ -38,13 +27,13 @@
     display: block;
 
     .marker-label {
-      background-color: #3498db; // Color de fondo del marcador
-      color: #ffffff; // Color del texto del marcador
-      padding: 8px; // Espaciado interno del marcador
-      border-radius: 5px; // Borde redondeado del marcador
-      font-size: 12px; // Tamaño del texto del marcador
-      font-weight: bold; // Peso de la fuente del marcador
-      margin-bottom: 8px; // Espacio inferior entre marcadores
+      background-color: #3498db;
+      color: #ffffff;
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 8px;
     }
   }
 

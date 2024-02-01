@@ -1,5 +1,3 @@
-// board.component.ts
-
 import { Component, AfterViewInit, ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { EdiBoardService } from 'src/app/data/services/access/estatus-shipment.service';
@@ -7,9 +5,10 @@ import { SharedService } from 'src/app/services/shared/shared.service';
 import { PosicionViajesModel } from 'src/app/models/PosicionesViajesModelEdi';
 import { Observable, Subscription, of } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
-import { Table } from 'primeng/table';
+import { Table } from 'primeng/table';48
 import { environment } from 'src/app/environments/environment';
 import { SortEvent } from 'primeng/api';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 
 
@@ -21,15 +20,24 @@ import { SortEvent } from 'primeng/api';
 export class BoardComponent implements AfterViewInit, OnDestroy {
   @ViewChild('shipmentsTable', { static: false }) shipmentsTable!: ElementRef;
   @ViewChild('detallesTable', { static: false }) detallesTable!: ElementRef;
+  orderKeys: string[] = ["nuevos", "confirmados", "relacionados", "reporeventos", "cancelados", "liberados", "fallidos"];
+
+  estatusSvgMap: { [key: string]: string } = {
+    'nuevos': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-plus" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M12 11l0 6" /><path d="M9 14l6 0" /></svg>',
+    'confirmados': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-check" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>',
+    'relacionados': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-description" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svg>',
+    'reporeventos': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-export" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="green" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3" /></svg>',
+    'cancelados': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-x" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M10 12l4 4m0 -4l-4 4" /></svg>',
+    'liberados': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-certificate" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 8v-3a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5" /><path d="M6 14m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M4.5 17l-1.5 5l3 -1.5l3 1.5l-1.5 -5" /></svg>',
+    'fallidos': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-alert" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="red" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M12 17l.01 0" /><path d="M12 11l0 3" /></svg>'
+  };
 
   public dataSingleEdiResultHeader$!: Observable<any>; // Puedes cambiar el tipo de datos según tu modelo
   public dataSingleEdiResult$!: Observable<any>; // Puedes cambiar el tipo de datos según tu modelo
   private dataSingleEdiResultSubscription: Subscription | undefined;
 
-/*   private svgMap: { [key: string]: string } = {};
-  public svgActual: string = ''; // Agrega esta línea */
-  private isMouseOverShipmentTable: boolean = false;
-  private isMouseOverDetallesTable: boolean = false;
+/*   private isMouseOverShipmentTable: boolean = false;
+  private isMouseOverDetallesTable: boolean = false; */
   private autoScrollInterval: any;
 
   autoNavigateChecked: boolean = false;
@@ -37,16 +45,14 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private renderer: Renderer2,
-    private ediAuthService: EdiBoardService,
     private sharedService: SharedService,
+    private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef
   ){
   }
 
-  // En tu componente "board"
   ngOnInit(): void {
-    this.showModal = false; // Asegúrate de que el modal esté oculto al cargar la vista de "board"
+    this.showModal = false;
 
     const duration = environment.duration.board;
 
@@ -60,9 +66,12 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  getSvgContent(svg: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(svg);
+  }
+
 
   customSort(event: SortEvent): void {
-    // Ordenar el array infoTimeShipments según la columna horasTranscurrido
     if (event.field === 'horasTranscurrido' && event.order !== 0) {
       const order = event.order === 1 ? 1 : -1;
 
@@ -80,9 +89,6 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
       });
     }
   }
-
-
-
 
   // Método para obtener las entradas del objeto
   getObjectEntries(obj: any): any[] {
@@ -119,6 +125,46 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
     clearInterval(this.autoScrollInterval);
   }
 
+  getBadgeClass(estatus_EDI: string, horasTranscurrido: string): any {
+    if (!horasTranscurrido) {
+      return this.getEstatusClass(estatus_EDI, "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300");
+    }
+
+    const array = horasTranscurrido.split(':');
+    const horasMinutos = (parseInt(array[0], 10) * 60) + parseInt(array[1], 10);
+
+    return this.getHorasTranscurridoClass(horasMinutos);
+  }
+
+  private getEstatusClass(estatus_EDI: string, defaultClass: string): any {
+    switch (estatus_EDI) {
+      case "Confirmar":
+        return this.mergeClasses(defaultClass, "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300");
+      case "Relacionar":
+        return this.mergeClasses(defaultClass, "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300");
+      case "Reportar Eventos":
+        return this.mergeClasses(defaultClass, "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300");
+      default:
+        return defaultClass;
+    }
+  }
+
+  private getHorasTranscurridoClass(horasMinutos: number): any {
+    if (horasMinutos < 30) {
+      return "bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300";
+    } else if (horasMinutos >= 30 && horasMinutos < 60) {
+      return "bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-300";
+    } else if (horasMinutos >= 60 && horasMinutos < 90) {
+      return "bg-warning-100 text-warning-800 dark:bg-warning-900 dark:text-warning-300";
+    } else {
+      return "bg-danger-100 text-danger-800 dark:bg-danger-900 dark:text-danger-300";
+    }
+  }
+
+  private mergeClasses(baseClass: string, additionalClasses: string): string {
+    return `${baseClass} ${additionalClasses}`;
+  }
+
   public toggleAutoScroll(table: HTMLElement, isMouseOver: boolean): void {
     if (isMouseOver) {
       this.addAutoScrollEvent(table);
@@ -126,4 +172,5 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
       this.clearAutoScrollInterval();
     }
   }
+
 }

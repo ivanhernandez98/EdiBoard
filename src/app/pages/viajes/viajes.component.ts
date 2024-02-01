@@ -7,6 +7,7 @@ import { Observable, Subscription, of } from 'rxjs';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { EdiBoardService } from 'src/app/data/services/access/estatus-shipment.service';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 //import { DataSingle,DataList, PosicionesViajes } from 'src/app/data/interfaces/PosicionViaje';
 
 
@@ -43,7 +44,7 @@ export class ViajesComponent implements OnInit {
 
   map: google.maps.Map | undefined;
   apiKey: string = environment.googleMapApiKey;
-  zoom: number = 6 || null;
+  zoom: number = 7 || null;
 
   public dataSingleEdiResultHeader$!: Observable<any>; // Puedes cambiar el tipo de datos según tu modelo
   public dataSingleEdiResultPoints$!: Observable<any>; // Puedes cambiar el tipo de datos según tu modelo
@@ -55,7 +56,7 @@ export class ViajesComponent implements OnInit {
   transitoIcon: string = '	https://cdn-icons-png.flaticon.com/512/1048/1048330.png';
 
   options: google.maps.MapOptions = {
-    center: { lat: 23.3449538, lng: -102.2906329 },
+    center: { lat: 25.5871182, lng: -100.0782092 },
     zoom: this.zoom
   };
   mapMarkers: { [key: number]: google.maps.Marker } = {};
@@ -64,11 +65,24 @@ export class ViajesComponent implements OnInit {
   dataSingleEdiResult: any[] = [];
   autoNavigateChecked: boolean = false;
 
+  orderKeys: string[] = ["nuevos", "confirmados", "relacionados", "reporeventos", "cancelados", "liberados", "fallidos"];
+
+  estatusSvgMap: { [key: string]: string } = {
+    'nuevos': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-plus" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M12 11l0 6" /><path d="M9 14l6 0" /></svg>',
+    'confirmados': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-check" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>',
+    'relacionados': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-description" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svg>',
+    'reporeventos': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-export" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="green" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3" /></svg>',
+    'cancelados': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-x" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M10 12l4 4m0 -4l-4 4" /></svg>',
+    'liberados': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-certificate" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 8v-3a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5" /><path d="M6 14m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M4.5 17l-1.5 5l3 -1.5l3 1.5l-1.5 -5" /></svg>',
+    'fallidos': '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-alert" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" stroke="red" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M12 17l.01 0" /><path d="M12 11l0 3" /></svg>'
+  };
+
   constructor(
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private router: Router,
     private renderer: Renderer2,
+    private sanitizer: DomSanitizer,
     private ediAuthService: EdiBoardService,
     private sharedService: SharedService,
   ) { }
@@ -84,12 +98,16 @@ export class ViajesComponent implements OnInit {
         setTimeout(() => {
           console.log('Tiempo de espera para Viajes:', duration);
           // Navegar a la siguiente página (Board) después del tiempo especificado
-          this.router.navigate(['/board']);
+          this.router.navigate(['/reporte']);
         }, duration);
       }
     });
 
     this.loadGoogleMapsScript();
+  }
+
+  getSvgContent(svg: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(svg);
   }
 
 

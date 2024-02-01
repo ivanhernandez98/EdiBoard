@@ -1,34 +1,37 @@
+.layout {
+  width: 100%;
 
- .layout {
-  height: 70vh;
   display: grid;
-  grid-template-areas: "sidebar body";
-  grid-template-columns: auto 1fr;
+  grid:
+    "sidebar Detalles Errores" 1fr
+    / auto 1fr 1fr;
   gap: 8px;
+  grid-auto-flow: row dense;
 }
 
-.body {
-  display: flex;
-  flex-wrap: wrap;
-  //flex-direction: column;
-  overflow-y: hidden;
+.sidebar { grid-area: sidebar; white-space:nowrap; }
+.Detalles { grid-area: Detalles; }
+.Errores { grid-area: Errores; }
+
+.sticky-th {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  z-index: 2;
 }
+
 
 .scrollable-table {
   overflow-y: auto;
   position: relative;
   overflow-y: hidden;
-
-/*   table {
-    width: 50%;
-    height: 100px;
-  } */
+  //z-index: 1;
 
   th {
     position: sticky;
     top: 0;
     background-color: #f8f9fa;
-    z-index: 2;
+    z-index: 1;
   }
 
   td {

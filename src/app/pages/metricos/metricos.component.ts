@@ -245,7 +245,7 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
       series: estatusData.map(estatus => estatus.orden),
       colors: estatusData.map(estatus => estatus.color),
       chart: {
-        height: 600,
+        height: 500,
         width: 900,
         type: 'pie',
       },
@@ -372,8 +372,10 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
         type: 'area',
         fontFamily: 'Inter, sans-serif',
         fontSize: '1.5rem',
-        height: '100%',
+        maxHeight: '90%',
         maxWidth: '100%',
+        height: 500,
+        width: 700,
         dropShadow: {
           enabled: false,
         },

@@ -281,8 +281,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         // Guardar la descripción en el servicio compartido
         this.sharedService.setDescripcion(clienteDescripcion.descripcion);
 
-        // Guarda la duracion del tiempo de espera para el board
-        const duration = environment.duration.board;
+/*         const duration = environment.duration.board;
 
         this.sharedService.autoNavigate$.subscribe(autoNavigate => {
           if (autoNavigate && environment.autoNavigate === 1) {
@@ -291,10 +290,10 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.router.navigate(['/board']);
             }, duration);
           }
-        });
+        }); */
 
         // Navegar a la página de board
-        //this.router.navigate(['/board']);
+        this.router.navigate(['/board']);
       } else {
         console.error('La respuesta de la API es inválida.');
       }

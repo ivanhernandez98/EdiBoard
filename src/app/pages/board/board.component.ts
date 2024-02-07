@@ -40,7 +40,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
   private isMouseOverDetallesTable: boolean = false; */
   private autoScrollInterval: any;
 
-  autoNavigateChecked: boolean = false;
+  autoNavigateChecked: boolean = true;
   showModal = false;
 
   constructor(

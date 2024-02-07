@@ -4,7 +4,7 @@ import { from, Observable,throwError  } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { EmpresaCliente } from '../../../models/EmpresaCliente';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 
 
 
@@ -15,12 +15,13 @@ export class EdiBoardService {
 
   public tokenBearer = "";
   private edibaseEndpoint = environment.API_URL_EDIBOARD;
+  private edibaseEndpointEmpresaCliente = environment.API_V_EDI_EmpCli;
 
   constructor(private http: HttpClient) { }
 
   public getEmpresaCliente(): Observable<EmpresaCliente> {
     //return this.http.get<EmpresaCliente>(this.edibaseEndpoint + 'GetEmpresaCliente');
-    return this.http.get<EmpresaCliente>("https://gps.apphgtransportaciones.com/apiViajes/api/PosicionViajes/GetEmpresaCliente"); //Productiva
+    return this.http.get<EmpresaCliente>(this.edibaseEndpointEmpresaCliente); //Productiva
   }
 
   public postAuthEdiBoard(empresa: string): Observable<any> {
@@ -59,8 +60,8 @@ export class EdiBoardService {
         'Authorization': `${token}`
       });
 
-      //const tripInfoEndpoint = `${this.edibaseEndpoint}api/EstatusViajesEdi?empresa=${empresa}&ClienteEdiConfiguracionId=${ClienteEdiConfiguracionId}`;
-      const tripInfoEndpoint = `${this.edibaseEndpoint}api/EstatusViajesEdi?empresa=${'HG'}&ClienteEdiConfiguracionId=${2}`;
+      const tripInfoEndpoint = `${this.edibaseEndpoint}api/EstatusViajesEdi?empresa=${empresa}&ClienteEdiConfiguracionId=${ClienteEdiConfiguracionId}`;
+      //const tripInfoEndpoint = `${this.edibaseEndpoint}api/EstatusViajesEdi?empresa=${'HG'}&ClienteEdiConfiguracionId=${2}`;
       this.http.get<any>(tripInfoEndpoint, { headers })
         .pipe(
           catchError(error => {

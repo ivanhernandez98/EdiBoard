@@ -121,6 +121,11 @@
     text-align: left;
     z-index: -1;
   }
+
+  /* Detener la animación en el hover */
+  &:hover td {
+    animation-play-state: paused;
+  }
 }
 
 @keyframes scrollAnimation {

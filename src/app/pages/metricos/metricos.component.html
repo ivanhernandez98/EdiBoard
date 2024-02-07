@@ -1,4 +1,4 @@
-<section class="layout w-full">
+<!-- <section class="layout w-full">
   <div class="sidebar">
     <ng-container *ngIf="dataSingleEdiResultHeader$ | async as header">
       <dl
@@ -52,41 +52,84 @@
     </div>
   </div>
 
-     <div class="Errores" style="display: flex">
+  <div class="Errores" style="display: flex">
     <div class="w-full mt-4 px-2">
-           <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6" style="height: 100%; display: flex; align-content: space-around; flex-wrap: wrap; justify-content: center;">
+      <div
+        class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6"
+        style="
+          height: 100%;
+          display: flex;
+          align-content: space-around;
+          flex-wrap: wrap;
+          justify-content: center;
+        "
+      >
         <div class="flex justify-between mb-2 items-center content-center">
           <div>
-            <h5 class="leading-none text-5xl font-bold text-gray-900 dark:text-white pb-2 text-center">Semana Actual</h5>
+            <h5
+              class="leading-none text-5xl font-bold text-gray-900 dark:text-white pb-2 text-center"
+            >
+              Semana Actual
+            </h5>
           </div>
         </div>
         <div class="py-2" id="pie-chart"></div>
       </div>
-
     </div>
   </div>
+</section>
+ -->
 
-<!--   <div class="Errores" style="display: flex">
-    <div class="w-full mt-4 px-2">
-      <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6" style="height: 100%; display: flex; align-content: space-between; flex-wrap: wrap; justify-content: center;">
-        <div class="flex justify-between items-start w-full">
-          <div class="flex-col items-center">
-            <div class="flex items-center mb-1">
-              <h1
-                class="text-4xl font-bold leading-none text-gray-900 dark:text-white me-1"
-              >
-                Grafica Semanal
-              </h1>
 
+ <section>
+  <div class="max-w-11xl mx-auto px-4 py-4 sm:px-6 md:px-24 md:py-16 lg:px-8 lg:py-10">
+    <div class="sidebar">
+      <div class="row-gap-8 grid grid-cols-2 rounded-lg border border-gray-200 bg-white shadow md:grid-cols-4 dark:border-gray-700 dark:bg-gray-800">
+        <ng-container *ngIf="dataSingleEdiResultHeader$ | async as header">
+          <div class="col m-2 flex items-center justify-center" *ngFor="let key of orderKeys">
+            <div *ngIf="header.hasOwnProperty(key)" class="col-md-6 flex items-center justify-center">
+              <ng-container *ngIf="estatusSvgMap[key] as svg">
+                <div [innerHTML]="getSvgContent(svg)" class="mr-2 flex items-center"></div>
+              </ng-container>
+
+              <div class="col-md-6">
+                <div class="text-center dark:md:border-slate-500">
+                  <div class="font-heading text-[2.6rem] font-bold lg:text-5xl xl:text-6xl dark:text-white">{{ header[key] }}</div>
+                  <p class="text-sm font-medium uppercase tracking-widest text-gray-800 lg:text-base dark:text-slate-400">{{ key }}</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-
-        <div class="py-6" id="pie-chart"></div>
-
+        </ng-container>
       </div>
     </div>
-  </div> -->
 
+    <div class="Shipments mt-4">
+      <div class="row-gap-8 grid grid-cols-1 rounded-lg border border-gray-200 bg-white shadow md:grid-cols-2 dark:border-gray-700 dark:bg-gray-800">
+        <div class="col m-2 flex-wrap items-center justify-center">
+
+          <div class="relative max-w-7xl overflow-x-auto shadow-md sm:rounded-lg" style="max-height: 60vh; overflow-y: auto;">
+            <div class=" flex content-center items-center justify-between">
+              <div>
+                <h5 class="pb-2 text-center text-5xl font-bold leading-none text-gray-900 dark:text-white">Shipments recibidos</h5>
+              </div>
+            </div>
+            <div id="data-labels-chart" class="py-1" class="chart-container"></div>
+          </div>
+
+        </div>
+
+        <div class="col flex items-center justify-center">
+          <div class="relative max-w-7xl overflow-x-auto shadow-md sm:rounded-lg" style="max-height: 60vh; overflow-y: auto;">
+            <div class=" flex content-center items-center justify-between">
+              <div>
+                <h5 class="pb-2 text-center text-5xl font-bold leading-none text-gray-900 dark:text-white">Semana Actual</h5>
+              </div>
+            </div>
+            <div class="py-1" id="pie-chart"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

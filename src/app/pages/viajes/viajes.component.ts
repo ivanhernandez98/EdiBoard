@@ -106,6 +106,13 @@ export class ViajesComponent implements OnInit {
     this.loadGoogleMapsScript();
   }
 
+  ngOnDestroy() {
+    // Cancelar la suscripción para evitar fugas de memoria
+    if (this.dataSingleEdiResultSubscription) {
+      this.dataSingleEdiResultSubscription.unsubscribe();
+    }
+  }
+
   getSvgContent(svg: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(svg);
   }

@@ -33,7 +33,7 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
   empresaSeleccionada: string = '';
   clienteSeleccionado: number = 0;
   token: string = '';
-
+  chartOptions: any;
   autoNavigateChecked: boolean = false;
 
   orderKeys: string[] = [
@@ -69,7 +69,7 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
     private sharedService: SharedService,
     private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     this.dataSingleEdiResultSubscription =
@@ -142,7 +142,7 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
     }
   }
 
-  initPieChart(data: EdiMetrico) {
+  /* initPieChart(data: EdiMetrico) {
     // Filtra los datos de la última semana
     const ultimaSemana = Math.max(...(data.semanas || []));
     const datosUltimaSemana =
@@ -178,8 +178,7 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
           show: true,
           style: {
             fontFamily: 'Inter, sans-serif',
-            cssClass: 'text-2xl font-normal fill-gray-500 dark:fill-gray-400',
-            fontSize: '1.5rem',
+            cssClass: 'text-2xl font-normal fill-gray-500 dark:fill-gray-400'
           },
         },
         axisBorder: {
@@ -189,7 +188,12 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
           show: false,
         },
       },
-      series: cantidadXEstatus,
+      series: [
+        {
+          name: 'Estatus',
+          data: cantidadXEstatus,
+        },
+      ],
       chart: {
         height: 600,
         width: 900,
@@ -227,7 +231,113 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
       );
       chart.render();
     }
+
+    if (document.getElementById('pie-chart') && typeof ApexCharts !== 'undefined') {
+      const chart = new ApexCharts(document.getElementById('pie-chart'), options);
+      chart.render();
+    }
+  } */
+
+  initPieChart(data: EdiMetrico): void {
+    const estatusData = data.ediEstatus || [];
+
+    this.chartOptions = {
+      series: estatusData.map(estatus => estatus.orden),
+      colors: estatusData.map(estatus => estatus.color),
+      chart: {
+        height: 600,
+        width: 900,
+        type: 'pie',
+      },
+      stroke: {
+        colors: ["white"],
+        lineCap: "",
+      },
+      plotOptions: {
+        pie: {
+          labels: {
+            show: true,
+          },
+          size: "100%",
+          dataLabels: {
+            offset: -25
+          }
+        },
+      },
+      labels: estatusData.map(estatus => estatus.estatus),
+      dataLabels: {
+        enabled: true,
+        style: {
+          fontFamily: "Inter, sans-serif",
+          cssClass: 'text-2xl text-white font-medium',
+          fontSize: '1.5rem'
+        },
+      },
+      legend: {
+        position: "bottom",
+        fontFamily: "Inter, sans-serif",
+        style: {
+          fontFamily: "Inter, sans-serif",
+          cssClass: 'text-2xl text-white font-medium',
+          fontSize: '1.5rem'
+        },
+      },
+      yaxis: {
+        labels: {
+          formatter: function (value: number) {
+            return value + "%";
+          },
+        },
+        style: {
+          fontFamily: "Inter, sans-serif",
+          cssClass: 'text-2xl text-white font-medium',
+          fontSize: '1.5rem'
+        },
+      },
+      xaxis: {
+        labels: {
+          formatter: function (value: number) {
+            return value  + "%"
+          },
+          style: {
+            fontFamily: "Inter, sans-serif",
+            cssClass: 'text-2xl text-white font-medium',
+            fontSize: '1.5rem'
+          },
+        },
+        axisTicks: {
+          show: false,
+        },
+        axisBorder: {
+          show: false,
+        },
+      },
+      responsive: [
+        {
+          breakpoint: 768, // Cambia estos valores según tus necesidades
+          options: {
+            chart: {
+              height: 300, // Nuevo tamaño para la pantalla pequeña
+            },
+            legend: {
+              position: "bottom",
+            },
+          },
+        },
+      ],
+    };
+
+    // Renderiza el gráfico
+    this.renderChart();
   }
+
+  renderChart(): void {
+    if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
+      const chart = new ApexCharts(document.getElementById("pie-chart"), this.chartOptions);
+      chart.render();
+    }
+  }
+
 
   initApexChart(data: EdiMetrico) {
     let options = {

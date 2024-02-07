@@ -15,5 +15,5 @@ export interface EdiEstatus {
   id_estatus: number;
   estatus: string;
   orden: number;
-  color: string;
+  color: string;  
 }

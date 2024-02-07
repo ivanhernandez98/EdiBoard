@@ -125,41 +125,28 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
     clearInterval(this.autoScrollInterval);
   }
 
-  getBadgeClass(estatus_EDI: string, horasTranscurrido: string): any {
+  public getHorasTranscurridoClass(horasTranscurrido: string): any {
     if (!horasTranscurrido) {
-      return this.getEstatusClass(estatus_EDI, "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300");
+      return "bg-blue-100 text-blue-800 text-2xl font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300";
     }
 
     const array = horasTranscurrido.split(':');
-    const horasMinutos = (parseInt(array[0], 10) * 60) + parseInt(array[1], 10);
+    const horas = parseInt(array[0], 10);
+    const minutos = parseInt(array[1], 10);
+    const totalMinutos = horas * 60 + minutos;
 
-    return this.getHorasTranscurridoClass(horasMinutos);
-  }
-
-  private getEstatusClass(estatus_EDI: string, defaultClass: string): any {
-    switch (estatus_EDI) {
-      case "Confirmar":
-        return this.mergeClasses(defaultClass, "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300");
-      case "Relacionar":
-        return this.mergeClasses(defaultClass, "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300");
-      case "Reportar Eventos":
-        return this.mergeClasses(defaultClass, "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300");
-      default:
-        return defaultClass;
-    }
-  }
-
-  private getHorasTranscurridoClass(horasMinutos: number): any {
-    if (horasMinutos < 30) {
-      return "bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300";
-    } else if (horasMinutos >= 30 && horasMinutos < 60) {
-      return "bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-300";
-    } else if (horasMinutos >= 60 && horasMinutos < 90) {
-      return "bg-warning-100 text-warning-800 dark:bg-warning-900 dark:text-warning-300";
+    if (totalMinutos < 30) {
+      return "bg-blue-100 text-blue-800 text-2xl font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300";
+    } else if (totalMinutos >= 30 && totalMinutos < 60) {
+      return "bg-green-100 text-green-800 text-2xl font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300";
+    } else if (totalMinutos >= 60 && totalMinutos < 90) {
+      return "bg-yellow-100 text-yellow-800 text-2xl font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300";
     } else {
-      return "bg-danger-100 text-danger-800 dark:bg-danger-900 dark:text-danger-300";
+      return "bg-red-100 text-red-800 text-2xl font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300";
     }
   }
+
+
 
   private mergeClasses(baseClass: string, additionalClasses: string): string {
     return `${baseClass} ${additionalClasses}`;

@@ -12,6 +12,7 @@ export const environment = {
     board: 5000, // 5 segundos para el componente Board
     metricos: 5000, // 5 segundos para el componente Metricos
     viajes: 10000, // 10 segundos para el componente Viajes
+    reporte: 10000,
   },
   production: false
 };

@@ -25,7 +25,6 @@
   overflow-y: auto;
   position: relative;
   overflow-y: hidden;
-  //z-index: 1;
 
   th {
     position: sticky;
@@ -48,6 +47,6 @@
   }
 
   100% {
-    transform: translateY(calc(-760px - 80%));
+    transform: translateY(calc(-860px - 80%));
   }
 }

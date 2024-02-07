@@ -5,6 +5,7 @@ import { SharedService } from 'src/app/services/shared/shared.service';
 import { PosicionViajesModel } from 'src/app/models/PosicionesViajesModelEdi';
 import { Router } from '@angular/router';
 import { Message } from 'primeng/api';
+import { environment } from 'src/app/environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -34,7 +35,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   visible: boolean = false;
   loading: boolean = false;
   messages: Message[] = [];
-  autoNavigateChecked: boolean = false;
+  autoNavigateChecked: boolean = true;
 
   showDialog() {
     this.visible = true;
@@ -280,8 +281,20 @@ export class HomeComponent implements OnInit, OnDestroy {
         // Guardar la descripción en el servicio compartido
         this.sharedService.setDescripcion(clienteDescripcion.descripcion);
 
+        // Guarda la duracion del tiempo de espera para el board
+        const duration = environment.duration.board;
+
+        this.sharedService.autoNavigate$.subscribe(autoNavigate => {
+          if (autoNavigate && environment.autoNavigate === 1) {
+            setTimeout(() => {
+              console.log('Tiempo de espera para Board:', duration);
+              this.router.navigate(['/board']);
+            }, duration);
+          }
+        });
+
         // Navegar a la página de board
-        this.router.navigate(['/board']);
+        //this.router.navigate(['/board']);
       } else {
         console.error('La respuesta de la API es inválida.');
       }

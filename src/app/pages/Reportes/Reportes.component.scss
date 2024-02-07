@@ -53,13 +53,38 @@
         /* Estilos adicionales para pantallas móviles */
       }
     }
+
+    .scrollable-table {
+      overflow-y: auto;
+      position: relative;
+      overflow-y: hidden;
+
+      th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 1;
+      }
+
+      td {
+        overflow-y: auto;
+        animation: scrollAnimation 10s linear infinite;
+        text-align: left;
+        z-index: -1;
+      }
+    }
+
   }
 
-  .detalles-edi {
+}
+
+.main {
+  grid-area: main;
+
+  .scrollable-table {
     overflow-y: auto;
     position: relative;
     overflow-y: hidden;
-    //z-index: 1;
 
     th {
       position: sticky;
@@ -76,9 +101,34 @@
     }
   }
 
-
 }
 
+.scrollable-table {
+  overflow-y: auto;
+  position: relative;
+  overflow-y: hidden;
 
+  th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 1;
+  }
 
-.main { grid-area: main; }
+  td {
+    overflow-y: auto;
+    animation: scrollAnimation 10s linear infinite;
+    text-align: left;
+    z-index: -1;
+  }
+}
+
+@keyframes scrollAnimation {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(calc(-760px - 80%));
+  }
+}

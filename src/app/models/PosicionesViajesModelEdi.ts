@@ -35,7 +35,7 @@ export namespace PosicionViajesModel {
 
   export class TranscurridoEdi {
     constructor(
-      public descripcion?: string,
+      public pedido?: string,
       public shipment?: string,
       public estatus_EDI?: string,
       public horasTranscurrido?: string
@@ -98,10 +98,10 @@ export namespace PosicionViajesModel {
       public remitente: string = '',
       public destinatario: string = '',
       public shipment: string = '',
-      public fecha_despacho: Date = new Date(),
-      public eta: Date = new Date(),
-      public fecha_real_viaje: Date = new Date(),
-      public fecha_real_fin_viaje: Date = new Date(),
+      public fecha_despacho:  string = '',
+      public eta:  string = '',
+      public fecha_real_viaje:  string = '',
+      public fecha_real_fin_viaje:  string = '',
       public status_viaje: string = '',
       public status_pedido: string = '',
       public posiciones: DataListEdi[] = []

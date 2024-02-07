@@ -34,6 +34,7 @@ export class ReportesComponent implements OnInit {
   private dataSingleEdiResultSubscription: Subscription | undefined;
   private EstatusShipmentsEdi?: PosicionViajesModel.DataSingleEdi[] = [];
   public tablaEdi?: Pedido[] = [];
+  public term: string = '';
 
   constructor(
     private router: Router,
@@ -44,7 +45,7 @@ export class ReportesComponent implements OnInit {
   ) {}
 
   DurationPage(){
-    const duration = environment.duration.metricos;
+    const duration = environment.duration.reporte;
 
     // Suscribirse al estado del toggle
     this.sharedService.autoNavigate$.subscribe((autoNavigate) => {
@@ -78,28 +79,10 @@ export class ReportesComponent implements OnInit {
         this.EstatusShipmentsEdi = dataSingleEdiResult?.viajesPosicionesEdi;
         this.cdr.detectChanges();
         this.GetDatosTabla();
+        this.search(); // Llama a la función de búsqueda después de obtener los datos
       }
     );
   }
-
-
-/*   GetDatosTabla(){
-    this.tablaEdi = this.EstatusShipmentsEdi?.map((item) => {
-      return {
-        id_pedido: item.id_pedido,
-        id_viaje: item.id_viaje,
-        shipment: item.shipment,
-        ubicacion: item.posiciones[0].ubicacion?.toString() || '',
-        equipo: item.posiciones[0].id_unidad || '',
-        fechaRelacionPedido: item.fecha_despacho,
-        eta: item.eta,
-        status_pedido: item.status_pedido,
-        detalle: item.status_viaje
-      };
-    }, []);
-
-    console.log(this.tablaEdi);
-  } */
 
   GetDatosTabla() {
     this.tablaEdi = this.EstatusShipmentsEdi?.map((item) => {
@@ -126,6 +109,41 @@ export class ReportesComponent implements OnInit {
     }, []);
 
     console.log(this.tablaEdi);
+  }
+
+  search() {
+    // Filtra los datos de la tabla según el término de búsqueda
+    if (this.EstatusShipmentsEdi) {
+      this.tablaEdi = this.EstatusShipmentsEdi.map((item) => {
+        const sortedPosiciones = item.posiciones ? item.posiciones.sort((a, b) => {
+          const dateA = a.posdate instanceof Date ? a.posdate : new Date(0);
+          const dateB = b.posdate instanceof Date ? b.posdate : new Date(0);
+          return dateB.getTime() - dateA.getTime();
+        }) : [];
+
+        return {
+          id_pedido: item.id_pedido,
+          id_viaje: item.id_viaje,
+          shipment: item.shipment,
+          ubicacion: sortedPosiciones.length > 0 ? sortedPosiciones[0].ubicacion || '' : '',
+          equipo: sortedPosiciones.length > 0 ? sortedPosiciones[0].id_unidad || '' : '',
+          fechaRelacionPedido: item.fecha_despacho.toString() || '',
+          eta: item.eta.toString() || '',
+          status_pedido: item.status_pedido,
+          detalle: item.status_viaje,
+        };
+      }).filter((pedido) => {
+        // Filtra los elementos que coincidan con el término de búsqueda
+        return (
+          pedido.id_pedido.toString().includes(this.term) ||
+          pedido.id_viaje.toString().includes(this.term) ||
+          pedido.equipo.toUpperCase().includes(this.term) ||
+          pedido.shipment.includes(this.term)
+        );
+      });
+
+      console.log(this.tablaEdi);
+    }
   }
 
 }

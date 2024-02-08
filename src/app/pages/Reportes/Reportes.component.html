@@ -70,19 +70,19 @@
               >
                 Pedido
               </th>
-              <th scope="col" class="px-6 py-3 sticky-th text-xl">Estatus</th>
-              <th scope="col" class="px-6 py-3 sticky-th text-xl">Viaje</th>
-              <th scope="col" class="px-6 py-3 sticky-th text-xl">Shipment</th>
-              <th scope="col" class="px-6 py-3 sticky-th text-xl">
+              <th scope="col" class="px-6 py-3 sticky-th text-2xl">Estatus</th>
+              <th scope="col" class="px-6 py-3 sticky-th text-2xl">Viaje</th>
+              <th scope="col" class="px-6 py-3 sticky-th text-2xl">Shipment</th>
+              <th scope="col" class="px-6 py-3 sticky-th text-2xl">
                 Ultima ubicacion
               </th>
-              <th scope="col" class="px-6 py-3 sticky-th text-xl">Unidad</th>
-              <th scope="col" class="px-6 py-3 sticky-th text-xl">
+              <th scope="col" class="px-6 py-3 sticky-th text-2xl">Unidad</th>
+              <th scope="col" class="px-6 py-3 sticky-th text-2xl">
                 Fecha Despachado
               </th>
-              <th scope="col" class="px-6 py-3 sticky-th text-xl">Fecha ETA</th>
+              <th scope="col" class="px-6 py-3 sticky-th text-2xl">Fecha ETA</th>
 
-              <th scope="col" class="px-6 py-3 sticky-th text-xl"></th>
+              <th scope="col" class="px-6 py-3 sticky-th text-2xl"></th>
             </tr>
           </thead>
           <tbody>
@@ -92,33 +92,33 @@
             >
               <td
                 scope="row"
-                class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
+                class="px-6 py-4 text-xl text-gray-900 whitespace-nowrap dark:text-white"
               >
                 {{ pedido.id_pedido }}
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-xl">
                 {{ pedido.status_pedido }}
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-xl">
                 {{ pedido.id_viaje }}
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-xl">
                 {{ pedido.shipment }}
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-xl">
                 {{ pedido.ubicacion }}
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-xl">
                 {{ pedido.equipo }}
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-xl">
                 {{ pedido.fechaRelacionPedido }}
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-xl">
                 {{ pedido.eta }}
               </td>
 
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-xl">
                 <div
                   *ngIf="pedido.detalle === 'T' || pedido.detalle === 'R'"
                   class="flex items-center"

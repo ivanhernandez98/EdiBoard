@@ -6,13 +6,14 @@ import { MetricosComponent } from './pages/metricos/metricos.component';
 
 import { ViajesComponent } from './pages/viajes/viajes.component';
 import { ReportesComponent } from './pages/Reportes/Reportes.component';
+import { AuthGuard } from './services/guard/auth.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent }, // Ruta por defecto apunta a la página de inicio
-  { path: 'board', component: BoardComponent },
-  { path: 'metricos', component: MetricosComponent  },
-  { path: 'viajes', component: ViajesComponent  },
-  { path: 'reporte', component: ReportesComponent  },
+  { path: 'board', component: BoardComponent, canActivate: [AuthGuard]  },
+  { path: 'metricos', component: MetricosComponent , canActivate: [AuthGuard]  },
+  { path: 'viajes', component: ViajesComponent, canActivate: [AuthGuard]   },
+  { path: 'reporte', component: ReportesComponent , canActivate: [AuthGuard]  },
   // Puedes agregar más rutas según tus necesidades
 ];
 

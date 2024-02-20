@@ -11,7 +11,7 @@ import { SharedService } from 'src/app/services/shared/shared.service';
 export class HeaderComponent implements OnInit {
   empresa: string = '';
   descripcion: string = '';
-  autoNavigateChecked: boolean = false;
+  autoNavigateChecked: boolean = this.sharedService.getAutoNavigate();
 
   constructor(private sharedService: SharedService) { }
 
@@ -31,6 +31,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onToggleChange(): void {
-    this.sharedService.setAutoNavigate(this.autoNavigateChecked);
+    this.sharedService.setAutoNavigate();
+    //this.sharedService.setAutoNavigate(this.autoNavigateChecked);
   }
 }

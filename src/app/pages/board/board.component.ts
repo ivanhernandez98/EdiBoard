@@ -40,7 +40,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
   private isMouseOverDetallesTable: boolean = false; */
   private autoScrollInterval: any;
 
-  autoNavigateChecked: boolean = true;
+  autoNavigateChecked: boolean = this.sharedService.getAutoNavigate();
   showModal = false;
 
   constructor(
@@ -55,9 +55,10 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
     this.showModal = false;
 
     const duration = environment.duration.board;
+    console.log('La navegacion esta',this.autoNavigateChecked);
 
     this.sharedService.autoNavigate$.subscribe(autoNavigate => {
-      if (autoNavigate && environment.autoNavigate === 1) {
+      if (autoNavigate && this.autoNavigateChecked === true) {
         setTimeout(() => {
           console.log('Tiempo de espera para Board:', duration);
           this.router.navigate(['/metricos']);

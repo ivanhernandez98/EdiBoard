@@ -63,7 +63,7 @@ export class ViajesComponent implements OnInit {
 
 
   dataSingleEdiResult: any[] = [];
-  autoNavigateChecked: boolean = false;
+  autoNavigateChecked: boolean = this.sharedService.getAutoNavigate();
 
   orderKeys: string[] = ["nuevos", "confirmados", "relacionados", "reporeventos", "cancelados", "liberados", "fallidos"];
 
@@ -93,7 +93,7 @@ export class ViajesComponent implements OnInit {
 
     // Suscribirse al estado del toggle
     this.sharedService.autoNavigate$.subscribe(autoNavigate => {
-      if (autoNavigate && environment.autoNavigate === 1) {
+      if (autoNavigate && environment.autoNavigate === true) {
         // Realizar acciones después de la duración especificada
         setTimeout(() => {
           console.log('Tiempo de espera para Viajes:', duration);

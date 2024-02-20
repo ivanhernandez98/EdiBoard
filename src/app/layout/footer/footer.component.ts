@@ -29,6 +29,7 @@ export class FooterComponent {
   }
 
   onToggleChange(): void {
-    this.sharedService.setAutoNavigate(this.autoNavigateChecked);
+    this.sharedService.setAutoNavigate();
+    //this.sharedService.setAutoNavigate(this.autoNavigateChecked);
   }
 }

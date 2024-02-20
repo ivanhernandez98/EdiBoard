@@ -34,7 +34,7 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
   clienteSeleccionado: number = 0;
   token: string = '';
   chartOptions: any;
-  autoNavigateChecked: boolean = false;
+  autoNavigateChecked: boolean = this.sharedService.getAutoNavigate();
 
   orderKeys: string[] = [
     'nuevos',
@@ -102,7 +102,7 @@ export class MetricosComponent implements AfterViewInit, OnDestroy, OnInit {
 
     // Suscribirse al estado del toggle
     this.sharedService.autoNavigate$.subscribe((autoNavigate) => {
-      if (autoNavigate && environment.autoNavigate === 1) {
+      if (autoNavigate && environment.autoNavigate === true) {
         // Realizar acciones después de la duración especificada
         setTimeout(() => {
           console.log('Tiempo de espera para Metricos:', duration);

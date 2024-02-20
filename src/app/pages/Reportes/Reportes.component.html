@@ -16,7 +16,7 @@
             class="p-5 text-2xl font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800"
             style="position: sticky; z-index: 1"
           >
-            Informacion del historial de Viajes
+            Ubicacion de viajes EDI
             <p
               class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400"
             >
@@ -80,9 +80,9 @@
               <th scope="col" class="px-6 py-3 sticky-th text-2xl">
                 Fecha Despachado
               </th>
-              <th scope="col" class="px-6 py-3 sticky-th text-2xl">Fecha ETA</th>
+              <th scope="col" class="px-6 py-3 sticky-th text-2xl">Fecha Despachado</th>
 
-              <th scope="col" class="px-6 py-3 sticky-th text-2xl"></th>
+              <!-- <th scope="col" class="px-6 py-3 sticky-th text-2xl"></th> -->
             </tr>
           </thead>
           <tbody>
@@ -118,7 +118,7 @@
                 {{ pedido.eta }}
               </td>
 
-              <td class="px-6 py-4 text-xl">
+<!--               <td class="px-6 py-4 text-xl">
                 <div
                   *ngIf="pedido.detalle === 'T' || pedido.detalle === 'R'"
                   class="flex items-center"
@@ -133,7 +133,8 @@
                   <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
                   Inactivo
                 </div>
-              </td>
+              </td> -->
+
             </tr>
           </tbody>
         </table>

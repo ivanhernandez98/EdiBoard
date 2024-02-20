@@ -35,7 +35,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   visible: boolean = false;
   loading: boolean = false;
   messages: Message[] = [];
-  autoNavigateChecked: boolean = true;
+
+  autoNavigateChecked: boolean = this.sharedService.getAutoNavigate();
 
   showDialog() {
     this.visible = true;
@@ -46,7 +47,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onToggleChange(): void {
-    this.sharedService.setAutoNavigate(this.autoNavigateChecked);
+    console.log()
+    //environment.autoNavigate = this.autoNavigateChecked;
+    //this.sharedService.setAutoNavigate(this.autoNavigateChecked);
+    this.sharedService.setAutoNavigate();
   }
 
   constructor(

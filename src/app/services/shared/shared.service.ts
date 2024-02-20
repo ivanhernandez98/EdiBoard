@@ -2,24 +2,18 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PosicionViajesModel } from 'src/app/models/PosicionesViajesModelEdi';
 import { dataSingle, EmpresaCliente } from 'src/app/models/EmpresaCliente';
+import { environment } from 'src/app/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
 
-
-  private autoNavigateSubject = new BehaviorSubject<boolean>(true);
-  public autoNavigate$ = this.autoNavigateSubject.asObservable();
-
   private dataSingleEdiResultSubject = new BehaviorSubject<PosicionViajesModel.DataSingleEdiResult | null>(null);
   public dataSingleEdiResult$ = this.dataSingleEdiResultSubject.asObservable();
 
   private dataSingleSubject = new BehaviorSubject<dataSingle[] | null>(null);
   public dataSingle$ = this.dataSingleSubject.asObservable();
-
-
-
 
   private empresaSeleccionadaSubject = new BehaviorSubject<string>('');
   public empresaSeleccionada$ = this.empresaSeleccionadaSubject.asObservable();
@@ -33,9 +27,37 @@ export class SharedService {
   private TokenSubject = new BehaviorSubject<string>('');
   public Token$ = this.TokenSubject.asObservable();
 
-  setAutoNavigate(value: boolean): void {
-    console.log('setAutoNavigate', value);
-    this.autoNavigateSubject.next(value);
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+
+
+
+  private autoNavigateSubject = new BehaviorSubject<boolean>(environment.autoNavigate);
+  public autoNavigate$ = this.autoNavigateSubject.asObservable();
+  
+  private autonavigateResult: boolean = environment.autoNavigate;
+
+  constructor() {
+    // Aquí podrías realizar alguna lógica para determinar si el usuario está autenticado al iniciar la aplicación
+    // Por ejemplo, podrías verificar si tienes un token válido almacenado en el localStorage
+    const token = localStorage.getItem('token');
+    this.isAuthenticatedSubject.next(!!token); // Emitir true si hay un token, false si no
+  }
+
+  isAuthenticated(): boolean {
+    console.log('esta autentificado')
+    return this.isAuthenticatedSubject.value;
+  }
+
+  setAutoNavigate(): void {
+    this.autonavigateResult = !this.autonavigateResult;
+
+    console.log('setAutoNavigate', this.autonavigateResult);
+    this.autoNavigateSubject.next(this.autonavigateResult);
+  }
+
+  getAutoNavigate() {
+    return this.autonavigateResult;
   }
 
   setDataSingleEdiResult(data: PosicionViajesModel.DataSingleEdiResult): void {
@@ -74,7 +96,7 @@ export class SharedService {
   clearAllData(): void {
     console.log('Clearing all data in SharedService');
 
-    this.autoNavigateSubject.next(false);
+    //this.autoNavigateSubject.next(false);
     this.dataSingleEdiResultSubject.next(null);
     this.dataSingleSubject.next(null);
     this.TokenSubject.next('');

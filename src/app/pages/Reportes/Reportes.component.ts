@@ -36,6 +36,8 @@ export class ReportesComponent implements OnInit {
   public tablaEdi?: Pedido[] = [];
   public term: string = '';
 
+  autoNavigateChecked: boolean = this.sharedService.getAutoNavigate();
+
   constructor(
     private router: Router,
     private ediAuthService: EdiBoardService,
@@ -49,7 +51,7 @@ export class ReportesComponent implements OnInit {
 
     // Suscribirse al estado del toggle
     this.sharedService.autoNavigate$.subscribe((autoNavigate) => {
-      if (autoNavigate && environment.autoNavigate === 1) {
+      if (autoNavigate && this.autoNavigateChecked === true) {
         // Realizar acciones después de la duración especificada
         setTimeout(() => {
           console.log('Tiempo de espera para Metricos:', duration);

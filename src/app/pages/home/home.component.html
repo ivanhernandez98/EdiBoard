@@ -16,12 +16,11 @@
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Selecciona tu empresa</label>
           <div class="relative inline-block text-left w-full">
             <select id="empresa" name="empresa" [(ngModel)]="empresaSeleccionada"
-              (change)="actualizarClientesSegunEmpresa()"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              <option value="" disabled selected>Empresa...</option>
-              <option class="justify-center items-center" *ngFor="let empresa of empresas" [value]="empresa">{{ empresa
-                }}</option>
-            </select>
+            (change)="actualizarClientesSegunEmpresa()"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value="" disabled selected>Empresa...</option>
+            <option class="justify-center items-center" *ngFor="let empresa of empresas" [value]="empresa">{{ empresa }}</option>
+        </select>
           </div>
         </div>
 
@@ -34,12 +33,11 @@
           </div>
           <div class="relative inline-block text-left mt-2 w-full">
             <select id="cliente" name="cliente" (change)="actualizarCLiente()"
-              [(ngModel)]="clientesSeleccionados.clienteEdiConfiguracionId"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              <option value="" disabled selected>Cliente...</option>
-              <option class="justify-center items-center" *ngFor="let cliente of clientes"
-                [value]="cliente.clienteEdiConfiguracionId">{{ cliente.descripcion }}</option>
-            </select>
+            [(ngModel)]="clientesSeleccionados.clienteEdiConfiguracionId"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value="" disabled selected>Cliente...</option>
+            <option class="justify-center items-center" *ngFor="let cliente of clientes" [value]="cliente.clienteEdiConfiguracionId">{{ cliente.descripcion }}</option>
+        </select>
           </div>
         </div>
 
@@ -48,7 +46,7 @@
             <div class="text-sm">
               <div class="justify-start items-start mx-auto" style="display: flex; align-items:start; justify-content:start;">
                 <label class="relative inline-flex items-start mb-5 cursor-pointer justify-start">
-                  <input type="checkbox" [(ngModel)]="autoNavigateChecked" class="sr-only peer" (change)="onToggleChange()" checked>
+                  <input type="checkbox" [(ngModel)]="autoNavigateChecked" name="autoNavigateChecked" class="sr-only peer" (change)="onToggleChange()" [checked]="autoNavigateChecked">
                   <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                   <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Pantalla Automatica</span>
                 </label>

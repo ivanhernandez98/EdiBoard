@@ -10,10 +10,10 @@ import { AuthGuard } from './services/guard/auth.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent }, // Ruta por defecto apunta a la página de inicio
-  { path: 'board', component: BoardComponent, canActivate: [AuthGuard]  },
-  { path: 'metricos', component: MetricosComponent , canActivate: [AuthGuard]  },
-  { path: 'viajes', component: ViajesComponent, canActivate: [AuthGuard]   },
-  { path: 'reporte', component: ReportesComponent , canActivate: [AuthGuard]  },
+  { path: 'board', component: BoardComponent }, /* , canActivate: [AuthGuard]  */
+  { path: 'metricos', component: MetricosComponent },
+  { path: 'viajes', component: ViajesComponent  },
+  { path: 'reporte', component: ReportesComponent  },
   // Puedes agregar más rutas según tus necesidades
 ];
 

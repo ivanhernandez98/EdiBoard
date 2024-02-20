@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { PosicionViajesModel } from 'src/app/models/PosicionesViajesModelEdi';
 import { dataSingle, EmpresaCliente } from 'src/app/models/EmpresaCliente';
 import { environment } from 'src/app/environments/environment.prod';
@@ -8,6 +8,7 @@ import { environment } from 'src/app/environments/environment.prod';
   providedIn: 'root',
 })
 export class SharedService {
+  private subscriptions: Subscription[] = [];
 
   private dataSingleEdiResultSubject = new BehaviorSubject<PosicionViajesModel.DataSingleEdiResult | null>(null);
   public dataSingleEdiResult$ = this.dataSingleEdiResultSubject.asObservable();
@@ -34,7 +35,7 @@ export class SharedService {
 
   private autoNavigateSubject = new BehaviorSubject<boolean>(environment.autoNavigate);
   public autoNavigate$ = this.autoNavigateSubject.asObservable();
-  
+
   private autonavigateResult: boolean = environment.autoNavigate;
 
   constructor() {
@@ -50,6 +51,7 @@ export class SharedService {
   }
 
   setAutoNavigate(): void {
+
     this.autonavigateResult = !this.autonavigateResult;
 
     console.log('setAutoNavigate', this.autonavigateResult);
@@ -95,6 +97,9 @@ export class SharedService {
   // Método para limpiar todas las variables en el servicio compartido
   clearAllData(): void {
     console.log('Clearing all data in SharedService');
+
+      // En clearAllData():
+  this.subscriptions.forEach(subscription => subscription.unsubscribe());
 
     //this.autoNavigateSubject.next(false);
     this.dataSingleEdiResultSubject.next(null);

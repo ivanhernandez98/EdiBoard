@@ -1,5 +1,5 @@
 import { Clientes } from './../../interfaces/Cliente';
-  import { PosicionViaje,PosicionesViajes } from './../../interfaces/PosicionViaje';
+  import { PosicionesViajes } from './../../interfaces/PosicionViaje';
   import { Injectable } from '@angular/core';
   import { HttpClient } from '@angular/common/http';
   import { Observable } from 'rxjs';
@@ -17,9 +17,9 @@ import { Clientes } from './../../interfaces/Cliente';
 
     constructor(private http: HttpClient) {}
 
-    obtenerPosicionViaje(noViaje: number, empresa: string, tipoSolicitud: number): Observable<PosicionViaje> {
+    obtenerPosicionViaje(noViaje: number, empresa: string, tipoSolicitud: number): Observable<PosicionesViajes> {
       const url = `${this.apiUrl}?noViaje=${noViaje}&empresa=${empresa}&tipoSolicitud=${tipoSolicitud}`;
-      return this.http.get<PosicionViaje>(url);
+      return this.http.get<PosicionesViajes>(url);
     }
 
     obtenerTrayectoViajes(empresa: string): Observable<PosicionesViajes[]> {

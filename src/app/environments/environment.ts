@@ -9,10 +9,10 @@ export const environment = {
 
   autoNavigate: true,
   duration: {
-    board: 5000, // 5 segundos para el componente Board
-    metricos: 5000, // 5 segundos para el componente Metricos
-    viajes: 10000, // 10 segundos para el componente Viajes
-    reporte: 10000,
+    board: 30000, // 30 segundos para el componente Board
+    metricos: 30000, // 30 segundos para el componente Metricos
+    viajes: 60000, // 1 minuto para el componente Viajes
+    reporte: 60000 // 1 minuto para el componente Reporte
   },
   production: false
 };

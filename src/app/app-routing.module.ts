@@ -6,6 +6,7 @@ import { MetricosComponent } from './pages/metricos/metricos.component';
 
 import { ViajesComponent } from './pages/viajes/viajes.component';
 import { ReportesComponent } from './pages/Reportes/Reportes.component';
+import { ViajesMapboxComponent } from './pages/viajesMapbox/viajesMapbox.component';
 import { AuthGuard } from './services/guard/auth.guard';
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'board', component: BoardComponent }, /* , canActivate: [AuthGuard]  */
   { path: 'metricos', component: MetricosComponent },
   { path: 'viajes', component: ViajesComponent  },
+  { path: 'viajesMapbox', component: ViajesMapboxComponent  },
   { path: 'reporte', component: ReportesComponent  },
   // Puedes agregar más rutas según tus necesidades
 ];

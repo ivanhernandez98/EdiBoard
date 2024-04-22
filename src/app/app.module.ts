@@ -26,6 +26,7 @@ import { TableModule } from 'primeng/table';
 import { DataViewModule } from 'primeng/dataview';
 import { MetricosComponent } from './pages/metricos/metricos.component';
 import { ViajesComponent } from './pages/viajes/viajes.component';
+import { ViajesMapboxComponent } from './pages/viajesMapbox/viajesMapbox.component';
 import { ReportesComponent } from './pages/Reportes/Reportes.component';
 
 
@@ -39,6 +40,7 @@ import { ReportesComponent } from './pages/Reportes/Reportes.component';
     BodyComponent,
     MetricosComponent,
     ViajesComponent,
+    ViajesMapboxComponent,
     ReportesComponent,
     FooterComponent
   ],

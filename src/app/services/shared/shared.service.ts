@@ -99,7 +99,7 @@ export class SharedService {
     console.log('Clearing all data in SharedService');
 
       // En clearAllData():
-  this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
 
     //this.autoNavigateSubject.next(false);
     this.dataSingleEdiResultSubject.next(null);

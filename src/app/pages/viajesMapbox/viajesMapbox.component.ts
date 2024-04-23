@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { EdiBoardService } from 'src/app/data/services/access/estatus-shipment.service';
 import { SharedService } from 'src/app/services/shared/shared.service';
+import * as mapboxgl from 'mapbox-gl'; // Import the 'mapboxgl' library
 
 @Component({
   selector: 'app-viajesMapbox',
@@ -42,7 +43,16 @@ export class ViajesMapboxComponent implements OnInit, AfterViewInit {
     'liberados',
     'fallidos',
   ];
+  visible: boolean = false;
 
+
+  public mapboxglToken = 'pk.eyJ1IjoiaXZhbmhlcm5hbmRlejEzMTA5OCIsImEiOiJjbHZibG5sNDIwYTNuMnZsZmZrcXNqNDIxIn0.SjKwXv_9xYJDGLvNcykB4A';
+  public map: mapboxgl.Map | undefined;
+  public style = 'mapbox://styles/mapbox/streets-v11';
+  public lat = 19.432608;
+  public lng = -99.133209;
+  public message = 'Hello World!';
+  public zoom = 9;
 
   constructor(
     private router: Router,
@@ -53,6 +63,13 @@ export class ViajesMapboxComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    const map = new mapboxgl.Map({
+      accessToken : 'pk.eyJ1IjoiaXZhbmhlcm5hbmRlejEzMTA5OCIsImEiOiJjbHZibG5sNDIwYTNuMnZsZmZrcXNqNDIxIn0.SjKwXv_9xYJDGLvNcykB4A',
+      container : 'map', // container ID
+      style : 'mapbox://styles/mapbox/streets-v12', // style URL
+      center : [-74.5, 40], // starting position [lng, lat]
+      zoom : 9 // starting zoom
+    });
   }
 
   ngAfterViewInit(): void {
@@ -73,5 +90,15 @@ export class ViajesMapboxComponent implements OnInit, AfterViewInit {
     return this.sanitizer.bypassSecurityTrustHtml(svg);
   }
 
+  showDialog() {
+    this.visible = true;
+  }
+
+  ngOnDestroy() {
+    // Cancelar la suscripción para evitar fugas de memoria
+    if (this.dataSingleEdiResultSubscription) {
+      this.dataSingleEdiResultSubscription.unsubscribe();
+    }
+  }
 
 }

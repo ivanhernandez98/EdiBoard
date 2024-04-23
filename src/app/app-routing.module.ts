@@ -11,12 +11,13 @@ import { AuthGuard } from './services/guard/auth.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent }, // Ruta por defecto apunta a la página de inicio
-  { path: 'board', component: BoardComponent }, /* , canActivate: [AuthGuard]  */
-  { path: 'metricos', component: MetricosComponent },
-  { path: 'viajes', component: ViajesComponent  },
+  { path: 'board', component: BoardComponent ,}, /* , canActivate: [AuthGuard]  */
+  { path: 'metricos', component: MetricosComponent ,},
+  { path: 'viajes', component: ViajesComponent  ,},
   { path: 'viajesMapbox', component: ViajesMapboxComponent  },
-  { path: 'reporte', component: ReportesComponent  },
+  { path: 'reporte', component: ReportesComponent  ,},
   // Puedes agregar más rutas según tus necesidades
+  { path: '**', redirectTo: '' } // Redirige a la página de inicio si la ruta no existe
 ];
 
 @NgModule({

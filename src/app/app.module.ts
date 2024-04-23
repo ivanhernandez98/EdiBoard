@@ -28,6 +28,7 @@ import { MetricosComponent } from './pages/metricos/metricos.component';
 import { ViajesComponent } from './pages/viajes/viajes.component';
 import { ViajesMapboxComponent } from './pages/viajesMapbox/viajesMapbox.component';
 import { ReportesComponent } from './pages/Reportes/Reportes.component';
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 
 
 
@@ -57,6 +58,9 @@ import { ReportesComponent } from './pages/Reportes/Reportes.component';
     MessagesModule,
     DataViewModule,
     HttpClientModule,
+    NgxMapboxGLModule.withConfig({
+      accessToken: 'pk.eyJ1IjoiaXZhbmhlcm5hbmRlejEzMTA5OCIsImEiOiJjbHV4Y2lqM3Ywbnp2MndtbzBzYjNzODd1In0.OWv2hG2319HNXXPJtScAQA', // Optional, can also be set per map (accessToken input of mgl-map)
+    }),
     AppRoutingModule,
     IonicModule.forRoot(),
   ],

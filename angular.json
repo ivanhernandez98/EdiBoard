@@ -37,6 +37,7 @@
             "styles": [
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
+              "mapbox-gl/dist/mapbox-gl.css",
               "src/styles.scss",
               {
                 "input": "node_modules/@ionic/angular/css/core.css"
@@ -144,6 +145,7 @@
               }
             ],
             "styles": [
+              "mapbox-gl/dist/mapbox-gl.css",
               "src/styles.scss"
             ],
             "scripts": []

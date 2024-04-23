@@ -49,10 +49,12 @@ export class AuthGuard implements CanActivate {
 
     // Si el usuario está autenticado, permitir el acceso a la ruta
     if (isAuthenticated) {
+      console.log('Autenticado');
       return true;
     } else {
       // Si el usuario no está autenticado, redirigirlo al componente HomeComponent o cualquier otro componente que desees
       this.router.navigate(['']); // Cambia '/' por la ruta a la que deseas redirigir
+      console.log('No autenticado');
       return false;
     }
   }

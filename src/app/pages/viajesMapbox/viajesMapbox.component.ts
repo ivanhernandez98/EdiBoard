@@ -5,6 +5,8 @@ import { Observable, of, Subscription } from 'rxjs';
 import { EdiBoardService } from 'src/app/data/services/access/estatus-shipment.service';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import * as mapboxgl from 'mapbox-gl'; // Import the 'mapboxgl' library
+import { environment } from 'src/app/environments/environment';
+import { PosicionesViajes } from 'src/app/data/interfaces/PosicionViaje';
 
 @Component({
   selector: 'app-viajesMapbox',
@@ -14,7 +16,15 @@ import * as mapboxgl from 'mapbox-gl'; // Import the 'mapboxgl' library
 export class ViajesMapboxComponent implements OnInit, AfterViewInit {
   public dataSingleEdiResultHeader$!: Observable<any>; // Puedes cambiar el tipo de datos según tu modelo
   public dataSingleEdiResult$!: Observable<any>; // Puedes cambiar el tipo de datos según tu modelo
+  public dataSingleEdiResultPoints$!: Observable<any>;
   private dataSingleEdiResultSubscription: Subscription | undefined;
+
+  private map : any;
+  private dataSingleEdiResult: any[] = [];
+
+  private asignadosIcon: string = 'https://cdn-icons-png.flaticon.com/512/10740/10740605.png';
+  private realizadosIcon: string = 'https://cdn-icons-png.flaticon.com/512/2821/2821924.png';
+  private transitoIcon: string = '	https://cdn-icons-png.flaticon.com/512/1048/1048330.png';
 
 
   estatusSvgMap: { [key: string]: string } = {
@@ -45,15 +55,6 @@ export class ViajesMapboxComponent implements OnInit, AfterViewInit {
   ];
   visible: boolean = false;
 
-
-  public mapboxglToken = 'pk.eyJ1IjoiaXZhbmhlcm5hbmRlejEzMTA5OCIsImEiOiJjbHZibG5sNDIwYTNuMnZsZmZrcXNqNDIxIn0.SjKwXv_9xYJDGLvNcykB4A';
-  public map: mapboxgl.Map | undefined;
-  public style = 'mapbox://styles/mapbox/streets-v11';
-  public lat = 19.432608;
-  public lng = -99.133209;
-  public message = 'Hello World!';
-  public zoom = 9;
-
   constructor(
     private router: Router,
     private ediAuthService: EdiBoardService,
@@ -63,35 +64,122 @@ export class ViajesMapboxComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    const map = new mapboxgl.Map({
-      accessToken : 'pk.eyJ1IjoiaXZhbmhlcm5hbmRlejEzMTA5OCIsImEiOiJjbHZibG5sNDIwYTNuMnZsZmZrcXNqNDIxIn0.SjKwXv_9xYJDGLvNcykB4A',
+    const duration = environment.duration.viajes;
+
+    // Suscribirse al estado del toggle
+    this.sharedService.autoNavigate$.subscribe(autoNavigate => {
+      if (autoNavigate && environment.autoNavigate === true) {
+        // Realizar acciones después de la duración especificada
+        setTimeout(() => {
+          console.log('Tiempo de espera para Viajes:', duration);
+          // Navegar a la siguiente página (Board) después del tiempo especificado
+          this.router.navigate(['/reporte']);
+        }, duration);
+      }
+    });
+
+    this.loadMap();
+  }
+
+  private async loadMap() {
+    // Código para cargar el mapa
+    (mapboxgl as typeof mapboxgl ).accessToken = 'pk.eyJ1IjoiaXZhbmhlcm5hbmRlejEzMTA5OCIsImEiOiJjbHZibG5sNDIwYTNuMnZsZmZrcXNqNDIxIn0.SjKwXv_9xYJDGLvNcykB4A';
+    this.map = new mapboxgl.Map({
       container : 'map', // container ID
       style : 'mapbox://styles/mapbox/streets-v12', // style URL
-      center : [-74.5, 40], // starting position [lng, lat]
-      zoom : 9 // starting zoom
+      center : [-100.1399488, 25.7383604], // starting position [lng, lat]
+      zoom : 5.75 // starting zoom
     });
+
+    this.map.addControl(new mapboxgl.NavigationControl());
+
   }
 
   ngAfterViewInit(): void {
-    this.dataSingleEdiResultSubscription =
-      this.sharedService.dataSingleEdiResult$.subscribe(
-        (dataSingleEdiResult) => {
-          // Actualiza la vista
-          this.dataSingleEdiResultHeader$ = of(dataSingleEdiResult?.header);
-          this.dataSingleEdiResult$ = of(dataSingleEdiResult);
+    this.dataSingleEdiResultSubscription = this.sharedService.dataSingleEdiResult$.subscribe(
+      (dataSingleEdiResult) => {
+        // Actualiza la vista
+        this.dataSingleEdiResultHeader$ = of(dataSingleEdiResult?.header);
+        this.dataSingleEdiResultPoints$ = of(dataSingleEdiResult?.viajesPosicionesEdi); //Aqui traigo el array de ViajesPosicionesEdi
+        this.dataSingleEdiResult$ = of(dataSingleEdiResult);
 
-          // Realiza la detección de cambios manualmente
-          this.cdr.detectChanges();
-        }
-      );
+        // Realiza la detección de cambios manualmente
+        this.cdr.detectChanges();
+        this.dataSingleEdiResult = dataSingleEdiResult?.viajesPosicionesEdi || [];
+
+        console.log('Viajes:', this.dataSingleEdiResult);
+        this.getViajesEdi();
+      }
+    );
   }
 
   getSvgContent(svg: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(svg);
   }
 
-  showDialog() {
-    this.visible = true;
+  public async getViajesEdi() {
+    console.log('Obteniendo viajes EDI...', this.dataSingleEdiResult);
+    console.log('Viajes EDI:', this.dataSingleEdiResult);
+
+    if (this.dataSingleEdiResult && this.dataSingleEdiResult.length > 0) {
+      for (const viaje of this.dataSingleEdiResult) {
+        this.addCustomMarker(viaje);
+      }
+      console.log('Viajes:', this.dataSingleEdiResult);
+    }
+    else {
+      console.log('No hay viajes EDI para mostrar.');
+    }
+
+  }
+
+  private addCustomMarker(viaje: any) {
+    const PViaje = viaje.id_viaje;
+    const status = viaje.status_viaje;
+    let icon = '';
+
+    switch (status) {
+      case 'T':
+        icon = 'ruta-transito-icon.png'; // Cargar imagen PNG
+        break;
+      case 'R':
+        icon = 'viaje-realizado-icon.png'; // Cargar imagen PNG
+        break;
+      default:
+        icon = 'viaje-asignado-icon.png'; // Cargar imagen PNG
+        break;
+    }
+
+
+    if (viaje.posiciones && viaje.posiciones.length > 0) {
+      const ultimaPosicion = viaje.posiciones[viaje.posiciones.length - 1];
+      const lat = ultimaPosicion.posLat;
+      const long = ultimaPosicion.posLon;
+
+      if (this.map) {
+        this.map.addImage('custom-marker', new Image(40, 40), { 'data': icon });
+        // Código para cargar los markers
+        const marker = new mapboxgl.Marker()
+        .setLngLat({lng: long, lat: lat})
+        .setPopup(new mapboxgl.Popup().setHTML(`Estatus del viaje: ${status.toString()} \nÚltima posición del viaje - ${PViaje} `))
+        .addTo(this.map);
+      }
+    }
+    console.log('Viaje:', viaje);
+  }
+
+  customMakerPopup(viaje: any) {
+
+        // const marker = new mapboxgl.Marker({
+        //   color: 'red',
+        //   scale: 0.8,
+        //   draggable: false,
+        //   pitchAlignment: 'auto',
+        //   rotationAlignment: 'auto'
+        // })
+        // .setLngLat({lng: long, lat: lat})
+        // .setPopup(new mapboxgl.Popup().setHTML(`Estatus del viaje: ${status.toString()} \nÚltima posición del viaje - ${PViaje} `))
+        // .addTo(this.map);
   }
 
   ngOnDestroy() {

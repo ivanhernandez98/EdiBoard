@@ -1,53 +1,59 @@
-<section>
-  <div class="w-full mx-auto px-4 py-4 sm:px-6 md:px-24 md:py-16 lg:px-8 lg:py-10">
+<!-- <div id="map"></div> -->
+<section
+  class="text-gray-600 body-font relative"
+  style="height: -webkit-fill-available"
+>
+  <div class="absolute inset-0 bg-gray-300">
+    <!-- <iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="map" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed"></iframe> -->
+    <div id="map"></div>
+    <!-- <iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="map" scrolling="no" src="https://www.openstreetmap.org/export/embed.html?bbox=-2.6706272363662724%2C42.845961772892764%2C-2.6656115055084233%2C42.84890760102263&amp; layer=mapnik&amp;marker=42.84743470451829%2C-2.6681193709373474"></iframe> -->
+  </div>
 
-    <div class="sidebar">
-      <div class="row-gap-8 grid grid-cols-2 rounded-lg border border-gray-200 bg-white shadow md:grid-cols-7 dark:border-gray-700 dark:bg-gray-800">
-        <ng-container *ngIf="dataSingleEdiResultHeader$ | async as header">
-          <div class="col flex items-center justify-center" *ngFor="let key of orderKeys">
-            <div *ngIf="header.hasOwnProperty(key)" class="col-md-6 flex items-center justify-center">
-              <ng-container *ngIf="estatusSvgMap[key] as svg">
-                <div [innerHTML]="getSvgContent(svg)" class="mr-2 flex items-center"></div>
-              </ng-container>
-              <hr class="border-t-2 border-gray-200 dark:border-gray-700">
+  <div class="container px-5 py-2 mx-auto flex">
+    <!-- <div class="lg:w-1/4 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md"> -->
+    <div
+      class="bg-white rounded-lg p-8 flex flex-nowrap flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md"
+      style="
+        display: flex;
+        justify-content: center;
+        flex-wrap: nowrap;
+        flex-direction: row;
+      "
+    >
+      <ng-container *ngIf="dataSingleEdiResultHeader$ | async as header">
+        <div
+          class="row flex items-center justify-center"
+          *ngFor="let key of orderKeys"
+        >
+          <div
+            *ngIf="header.hasOwnProperty(key)"
+            class="col-md-6 flex items-center justify-center"
+          >
+            <ng-container *ngIf="estatusSvgMap[key] as svg">
+              <div
+                [innerHTML]="getSvgContent(svg)"
+                class="mr-2 flex items-center"
+              ></div>
+            </ng-container>
+            <hr class="border-t-2 border-gray-200 dark:border-gray-700" />
 
-              <div class="col-md-6">
-                <div class="text-center dark:md:border-slate-500">
-                  <div class="font-heading text-[2.6rem] font-bold lg:text-5xl xl:text-6xl dark:text-white">{{ header[key] }}</div>
-                  <p class="text-sm font-medium uppercase tracking-widest text-gray-800 lg:text-base dark:text-slate-400">{{ key }}</p>
+            <div class="col-md-6">
+              <div class="text-center dark:md:border-slate-500">
+                <div
+                  class="font-heading text-[2.6rem] font-bold lg:text-5xl xl:text-6xl dark:text-white"
+                >
+                  {{ header[key] }}
                 </div>
+                <p
+                  class="text-sm font-medium uppercase tracking-widest text-gray-800 lg:text-base dark:text-slate-400"
+                >
+                  {{ key }}
+                </p>
               </div>
             </div>
           </div>
-        </ng-container>
-      </div>
+        </div>
+      </ng-container>
     </div>
-
-    <p>
-      viajesMapbox works!
-      <p-button (click)="showDialog()" icon="pi pi-external-link" label="Show"></p-button>
-      <p-dialog header="Header" [(visible)]="visible" [modal]="true" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-            <ng-template pTemplate="header">
-                <div class="inline-flex align-items-center justify-content-center gap-2">
-                    <span class="font-bold white-space-nowrap">Mapa</span>
-                </div>
-            </ng-template>
-
-            <p class="m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <ng-template pTemplate="footer">
-                <p-button icon="pi pi-check" (click)="visible = false" label="Ok" pAutoFocus [autofocus]="true"></p-button>
-            </ng-template>
-      </p-dialog>
-    </p>
-
-    <div id="map"></div>
-
-
-
   </div>
 </section>
-<div id="map"></div>
-

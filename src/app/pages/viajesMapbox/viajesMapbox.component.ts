@@ -22,9 +22,9 @@ export class ViajesMapboxComponent implements OnInit, AfterViewInit {
   private map : any;
   private dataSingleEdiResult: any[] = [];
 
-  private asignadosIcon: string = 'https://cdn-icons-png.flaticon.com/512/10740/10740605.png';
-  private realizadosIcon: string = 'https://cdn-icons-png.flaticon.com/512/2821/2821924.png';
-  private transitoIcon: string = '	https://cdn-icons-png.flaticon.com/512/1048/1048330.png';
+  public asignadosIcon: string =  'https://cdn-icons-png.flaticon.com/512/8701/8701529.png ' //'https://cdn-icons-png.flaticon.com/512/10740/10740605.png';
+  public realizadosIcon: string = 'https://cdn-icons-png.flaticon.com/512/5791/5791244.png' //'https://cdn-icons-png.flaticon.com/512/2821/2821924.png';
+  public transitoIcon: string = '	https://cdn-icons-png.flaticon.com/512/1048/1048330.png';
 
 
   estatusSvgMap: { [key: string]: string } = {
@@ -90,9 +90,7 @@ export class ViajesMapboxComponent implements OnInit, AfterViewInit {
       center : [-100.1399488, 25.7383604], // starting position [lng, lat]
       zoom : 5.75 // starting zoom
     });
-
     this.map.addControl(new mapboxgl.NavigationControl());
-
   }
 
   ngAfterViewInit(): void {
@@ -118,14 +116,14 @@ export class ViajesMapboxComponent implements OnInit, AfterViewInit {
   }
 
   public async getViajesEdi() {
-    console.log('Obteniendo viajes EDI...', this.dataSingleEdiResult);
-    console.log('Viajes EDI:', this.dataSingleEdiResult);
+    // console.log('Obteniendo viajes EDI...', this.dataSingleEdiResult);
+    // console.log('Viajes EDI:', this.dataSingleEdiResult);
 
     if (this.dataSingleEdiResult && this.dataSingleEdiResult.length > 0) {
       for (const viaje of this.dataSingleEdiResult) {
         this.addCustomMarker(viaje);
       }
-      console.log('Viajes:', this.dataSingleEdiResult);
+      //console.log('Viajes:', this.dataSingleEdiResult);
     }
     else {
       console.log('No hay viajes EDI para mostrar.');
@@ -134,52 +132,58 @@ export class ViajesMapboxComponent implements OnInit, AfterViewInit {
   }
 
   private addCustomMarker(viaje: any) {
+    //console.log('Agregando marcador personalizado...', viaje);
+
+    if(viaje.posiciones === null || viaje.posiciones === undefined || viaje.posiciones.length === 0) {
+      //console.log('Error: Viaje nulo o indefinido.', viaje);
+      return;
+    }
+
+    //console.log('Agregando marcador personalizado...', viaje);
+    const posiciones = viaje.posiciones;
+    const lastPosition = posiciones[posiciones.length - 1];
+    const lat = lastPosition.posLat;
+    const long = lastPosition.posLon;
+
     const PViaje = viaje.id_viaje;
     const status = viaje.status_viaje;
+
     let icon = '';
 
     switch (status) {
       case 'T':
-        icon = 'ruta-transito-icon.png'; // Cargar imagen PNG
+        icon = this.transitoIcon;
         break;
       case 'R':
-        icon = 'viaje-realizado-icon.png'; // Cargar imagen PNG
+        icon = this.realizadosIcon;
         break;
       default:
-        icon = 'viaje-asignado-icon.png'; // Cargar imagen PNG
+        icon = this.asignadosIcon;
         break;
     }
 
-
     if (viaje.posiciones && viaje.posiciones.length > 0) {
-      const ultimaPosicion = viaje.posiciones[viaje.posiciones.length - 1];
-      const lat = ultimaPosicion.posLat;
-      const long = ultimaPosicion.posLon;
-
-      if (this.map) {
-        this.map.addImage('custom-marker', new Image(40, 40), { 'data': icon });
-        // Código para cargar los markers
-        const marker = new mapboxgl.Marker()
+      // Añadir Custom Marker y Popup
+      if (!isNaN(lat) && !isNaN(long)) {
+        const marker = new mapboxgl.Marker({
+          element: this.createMarkerElement(icon),
+          anchor: 'bottom'
+        })
         .setLngLat({lng: long, lat: lat})
         .setPopup(new mapboxgl.Popup().setHTML(`Estatus del viaje: ${status.toString()} \nÚltima posición del viaje - ${PViaje} `))
         .addTo(this.map);
+      } else {
+        console.error('Error: Latitud o longitud inválidas:' + lat + ', ' + long + ' para el viaje: ' + PViaje + ' - ' + status + ' - ' + icon  );
       }
+
     }
-    console.log('Viaje:', viaje);
   }
 
-  customMakerPopup(viaje: any) {
-
-        // const marker = new mapboxgl.Marker({
-        //   color: 'red',
-        //   scale: 0.8,
-        //   draggable: false,
-        //   pitchAlignment: 'auto',
-        //   rotationAlignment: 'auto'
-        // })
-        // .setLngLat({lng: long, lat: lat})
-        // .setPopup(new mapboxgl.Popup().setHTML(`Estatus del viaje: ${status.toString()} \nÚltima posición del viaje - ${PViaje} `))
-        // .addTo(this.map);
+  // Función para crear un elemento HTML con la imagen como icono
+  private createMarkerElement(iconUrl: string): HTMLElement {
+    const element = document.createElement('div');
+    element.innerHTML = `<img src="${iconUrl}" style="width: 40px; height: 40px;">`; // Crea una imagen con la URL proporcionada como icono
+    return element;
   }
 
   ngOnDestroy() {
